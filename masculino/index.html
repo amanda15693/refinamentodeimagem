@@ -230,7 +230,7 @@ const S = ['n','t','e','r','s','c','d'];
 const NOME = {n:'Esportivo',t:'Tradicional',e:'Refinado',r:'Romântico',s:'Sexy',c:'Criativo',d:'Dramático'};
 
 /* Fotos publicadas em img/<chave>.webp. Peças: "<categoria>-<estilo>"; looks: id do look. Sem foto, o cartão mostra um espaço reservado. */
-const PHOTO = new Set([]);
+const PHOTO = new Set(['E2-n','E2-t','E2-e','E2-r','E2-s','E2-c','E2-d']);
 
 /* Paletas da pergunta E1 */
 const PAL = {n:['#b08a5e','#6f7650','#d8c6a5','#2f3a4a'],t:['#1f2f4d','#8d9097','#d9c9ab','#f3f1ec'],e:['#efe9df','#c9b49a','#1b1a1d','#8a6a4a'],r:['#bcd3ea','#d9cfe3','#e8cfd3','#f4efe8'],s:['#111014','#5e1424','#3a3d44','#c49a6c'],c:['#e0662f','#2f8c84','#f1c84b','#3d6db5'],d:['#0f0f10','#f6f5f2','#b3122b','#5a5a60']};
@@ -264,7 +264,7 @@ const STEPS = [
  ]},
  {key:'est', label:'Estética', title:'Preferências estéticas', lead:'Responda pelo que atrai você, mesmo que ainda não use. Não existe resposta certa.', qs:[
   {id:'E1',type:'style',vis:'pal',text:'Qual paleta mais atrai você?',o:{n:'Tons terrosos: caramelo, oliva e areia',t:'Azul-marinho, cinza, bege e branco',e:'Off-white, camelo, preto e marrom-café',r:'Azul-claro, lavanda, rosa-antigo e cinza-pérola',s:'Preto, vinho, chumbo e conhaque',c:'Cores vivas em combinações inesperadas',d:'Preto e branco em alto contraste, com uma cor intensa'}},
-  {id:'E2',type:'style',vis:'fxpr',text:'Qual combinação de tecido e estampa mais atrai você?',o:{n:'Malha de algodão, moletom e jeans, lisos ou com xadrez suave',t:'Sarja, oxford e lã fria, com listras clássicas ou príncipe de gales',e:'Linho nobre, lã fria e cashmere, lisos ou com microestampa',r:'Tricô fino, linho claro e camurça, em tons suaves',s:'Couro macio, malha ajustada e camisa de seda, em tons escuros',c:'Estampas étnicas, gráficas ou artísticas, com texturas mistas',d:'Couro, alfaiataria estruturada e geométricos gráficos'}},
+  {id:'E2',type:'style',vis:'fxpr',text:'Qual combinação de tecido e estampa mais atrai você?',o:{n:'Jeans, linho off-white e moletom cinza',t:'Sarja azul-marinho, chino cinza e tricoline branca',e:'Risca de giz, lã fria cinza e alfaiataria azul-marinho',r:'Chambray azul-claro, estampa delicada e listras suaves',s:'Cetim champanhe, jeans preto e sarja conhaque',c:'Pinceladas, folhagens e geométricos em tons terrosos',d:'Couro preto, jeans preto lavado e xadrez escuro'}},
   {id:'E3',type:'style',text:'Qual sapato você escolheria para usar o dia todo?',o:{n:'Tênis casual ou de corrida',t:'Sapato social derby ou oxford',e:'Mocassim de couro impecável',r:'Mocassim de camurça em tom suave',s:'Bota chelsea de couro preta',c:'Slip-on ou tênis estampado e colorido',d:'Coturno robusto ou tênis de design marcante'}},
   {id:'E4',type:'style',text:'Qual acessório tem mais a sua cara?',o:{n:'Relógio esportivo e pulseira de tecido',t:'Relógio clássico de couro e cinto combinando',e:'Relógio fino e minimalista e abotoaduras discretas',r:'Lenço de bolso e relógio de pulseira em tom claro',s:'Corrente fina no pescoço e óculos escuros',c:'Mix de anéis, pulseiras artesanais e chapéu',d:'Óculos de armação marcante e anel de design forte'}},
   {id:'E5',type:'style',text:'Que modelagem você prefere?',o:{n:'Solta e confortável',t:'Reta e alinhada, sem exageros',e:'Ajustada na medida certa, com cortes limpos',r:'Fluida e leve, sem marcar demais',s:'Justa, valorizando ombros, peito e braços',c:'Oversized, com sobreposições e volumes inesperados',d:'Estruturada, com ombros marcados e linhas fortes'}},
