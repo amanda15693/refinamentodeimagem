@@ -513,7 +513,7 @@ function renderQ(q){
   const v=st.a[q.id], arr=toArr(v);
   if(q.type==='style'||q.type==='contra'||q.type==='perc'){
     const order=shuffled(S,'q-'+q.id);
-    if(q.vis) return `<fieldset>${head}<div class="opts tiles">${order.map((k,i)=>`<label class="opt tile ${arr.includes(k)?'on':''}"><input type="checkbox" name="${q.id}" value="${k}" ${arr.includes(k)?'checked':''}>${visHtml(q,k)}<span class="tx"><span class="let">${LET[i]}</span>${q.vis==='fxpr'?'':`<span>${esc(q.o[k])}</span>`}</span></label>`).join('')}</div></fieldset>`;
+    if(q.vis) return `<fieldset>${head}<div class="opts tiles">${order.map((k,i)=>`<label class="opt tile ${arr.includes(k)?'on':''}"><input type="checkbox" name="${q.id}" value="${k}" ${arr.includes(k)?'checked':''}>${visHtml(q,k)}<span class="tx"><span class="let">${LET[i]}</span>${q.vis==='fxpr'&&PHOTO.has(q.id+'-'+k)?'':`<span>${esc(q.o[k])}</span>`}</span></label>`).join('')}</div></fieldset>`;
     return `<fieldset>${head}<div class="opts">${order.map((k,i)=>`<label class="opt ${arr.includes(k)?'on':''}"><input type="checkbox" name="${q.id}" value="${k}" ${arr.includes(k)?'checked':''}><span class="let">${LET[i]}</span><span>${esc(q.o[k])}</span></label>`).join('')}</div></fieldset>`;
   }
   if(q.type==='choice'||q.type==='multi'){
