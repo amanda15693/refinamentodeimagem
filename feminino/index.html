@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Teste de Assinatura de Estilo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Hanken+Grotesk:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: coluna única de leitura, como um caderno de ateliê; etapas em sequência com régua de progresso no topo */
+:root{
+  --bg:#f5f2f1; --surface:#ffffff; --ink:#241a22; --muted:#6c5f67; --line:#e3dadd;
+  --accent:#8e2f4b; --accent-ink:#ffffff; --accent-soft:#f4e4e9;
+  --st-n:#6f8455; --st-t:#34507a; --st-e:#9a8166; --st-r:#cf7f98; --st-s:#b1263a; --st-c:#d38d1f; --st-d:#2b2b2e;
+  --f-display:"Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-body:"Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-mono:"DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#161117; --surface:#201922; --ink:#f2eaee; --muted:#b5a7b0; --line:#3a2e3a;
+  --accent:#e58aa6; --accent-ink:#1d1018; --accent-soft:#3a2330;
+  --st-n:#9db37e; --st-t:#7f9fd0; --st-e:#cdb394; --st-r:#eaa3b9; --st-s:#ee5d70; --st-c:#f0b14d; --st-d:#e6e2e5;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161117; --surface:#201922; --ink:#f2eaee; --muted:#b5a7b0; --line:#3a2e3a;
+  --accent:#e58aa6; --accent-ink:#1d1018; --accent-soft:#3a2330;
+  --st-n:#9db37e; --st-t:#7f9fd0; --st-e:#cdb394; --st-r:#eaa3b9; --st-s:#ee5d70; --st-c:#f0b14d; --st-d:#e6e2e5;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--bg)}
+.wrap{max-width:860px;margin:0 auto}
+header.top{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);padding-block:18px 12px;border-bottom:1px solid var(--line)}
+.brandrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-size:1.35rem;font-weight:500;letter-spacing:.01em}
+.brand i{color:var(--accent)}
+.steplabel{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ruler{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-top:12px}
+.ruler button{all:unset;cursor:pointer;height:6px;border-radius:3px;background:var(--line)}
+.ruler button.done{background:var(--accent);opacity:.45}
+.ruler button.cur{background:var(--accent)}
+.ruler button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+main{padding-top:28px}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-weight:500;font-size:clamp(2rem,6vw,2.9rem);line-height:1.08;margin:.3rem 0 .6rem;text-wrap:balance}
+h1 em{font-style:italic;color:var(--accent)}
+h2{font-family:var(--f-display);font-weight:500;font-size:1.6rem;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:500;font-size:1.25rem;margin:0}
+.lead{color:var(--muted);max-width:62ch;margin:0 0 8px}
+.qlist{display:flex;flex-direction:column;gap:30px;margin-top:28px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{padding:0;font-weight:600;font-size:1.05rem;margin-bottom:12px;display:flex;gap:12px;align-items:baseline}
+legend .qn{font-family:var(--f-mono);font-weight:400;font-size:.78rem;color:var(--muted);flex:none}
+.hint{font-size:.85rem;color:var(--muted);margin:-6px 0 12px 0}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;transition:border-color .15s, background .15s;position:relative}
+.opt:hover{border-color:var(--muted)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.let{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.opt.on{border-color:var(--accent);background:var(--accent-soft)}
+.opt.on .let{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+/* alternativas visuais (cores, tecidos, estampas) */
+.opts.tiles{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.opt.tile{flex-direction:column;padding:0;overflow:hidden;gap:0}
+.opt.tile .vis{display:block;width:100%;height:104px;border-bottom:1px solid var(--line)}
+.opt.tile .tx{display:flex;gap:10px;padding:10px 12px;align-items:flex-start;font-size:.92rem;line-height:1.4}
+.vis.pal{display:grid;grid-template-columns:repeat(4,1fr)}
+.vis.pal span{display:block}
+.vis.duo{display:grid;grid-template-columns:1fr 1fr}
+.vis.duo span{display:block}
+.opt.tile .vis.photo-vis{height:auto;aspect-ratio:3/2;max-width:100%;background:#fff}
+.vis.photo-vis img{width:100%;height:100%;object-fit:cover;display:block}
+.fx-n{background-color:#d8c8a7;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.22) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(95,72,40,.2) 0 1px,transparent 1px 4px)}
+.fx-t{background-color:#2c3a57;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.13) 0 2px,transparent 2px 6px)}
+.fx-e{background:linear-gradient(115deg,#d6bf9b 0%,#f7ecd6 32%,#c6aa80 52%,#f2e4c9 74%,#cdb38e 100%)}
+.fx-r{background-color:#f3d6de;background-image:radial-gradient(circle,transparent 5px,rgba(255,255,255,.95) 6px,rgba(255,255,255,.95) 7px,transparent 8px),radial-gradient(circle,rgba(255,255,255,.9) 1.5px,transparent 2px);background-size:18px 18px,9px 9px}
+.fx-s{background:linear-gradient(160deg,#3a0b16 0%,#7d1a2c 40%,#c3586c 50%,#7d1a2c 62%,#2a0710 100%)}
+.fx-c{background-image:conic-gradient(#e0662f 0 25%,#2f8c84 0 50%,#f1c84b 0 75%,#8c3fa2 0);background-size:44px 44px}
+.fx-d{background:radial-gradient(circle at 30% 20%,#4c4c52,#0d0d0e 70%);box-shadow:inset 0 0 0 8px #0d0d0e,inset 0 0 0 9px rgba(255,255,255,.28)}
+.pr-n{background-color:#f3ece0;background-image:linear-gradient(90deg,rgba(150,115,70,.35) 50%,transparent 50%),linear-gradient(rgba(150,115,70,.35) 50%,transparent 50%);background-size:20px 20px}
+.pr-t{background:repeating-linear-gradient(90deg,#1f2f4d 0 6px,#f4f1ea 6px 17px)}
+.pr-e{background-color:#efe8dd;background-image:radial-gradient(#8f7759 1px,transparent 1.6px);background-size:9px 9px}
+.pr-r{background-color:#fbf0f2;background-image:radial-gradient(#e396ac 5px,transparent 5.6px),radial-gradient(#e396ac 5px,transparent 5.6px);background-size:26px 26px;background-position:0 0,13px 13px}
+.pr-s{background-color:#d8a45c;background-image:radial-gradient(ellipse at center,#b67a36 32%,#2a1a0c 35% 56%,transparent 60%),radial-gradient(ellipse at center,#2a1a0c 40%,transparent 46%),radial-gradient(ellipse at center,#b67a36 30%,#2a1a0c 34% 55%,transparent 60%);background-size:30px 24px,14px 10px,26px 30px;background-position:0 0,17px 13px,9px 16px}
+.pr-c{background-color:#f1c84b;background-image:linear-gradient(135deg,#2f8c84 25%,transparent 25%),linear-gradient(225deg,#2f8c84 25%,transparent 25%),linear-gradient(315deg,#e0662f 25%,transparent 25%),linear-gradient(45deg,#e0662f 25%,transparent 25%);background-size:26px 26px;background-position:-13px 0,-13px 0,0 0,0 0}
+.pr-d{background:conic-gradient(from 45deg,#0f0f10 0 25%,#f6f5f2 0 50%,#0f0f10 0 75%,#f6f5f2 0);background-size:64px 64px}
+/* tabela de adjetivos */
+.adj{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.adj label{display:grid;place-items:center;text-align:center;min-height:52px;padding:8px 6px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);cursor:pointer;font-size:.9rem;line-height:1.2}
+.adj label:nth-child(7n){border-right:0}
+.adj label:nth-last-child(-n+7){border-bottom:0}
+.adj input{position:absolute;opacity:0;pointer-events:none}
+.adj label.on{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.adj label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:-3px}
+textarea,input[type=text],input[type=date]{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
+textarea{min-height:92px;resize:vertical}
+textarea:focus,input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.scale{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+.scale label{display:grid;place-items:center;height:42px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;font-family:var(--f-mono);font-size:.9rem;font-variant-numeric:tabular-nums;position:relative}
+.scale input{position:absolute;opacity:0;pointer-events:none}
+.scale label.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.scale label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.scaleends{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-top:6px}
+.fields{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-top:24px}
+.fields label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--muted);min-width:0}
+.howto{margin-top:28px;border-top:1px solid var(--line);padding-top:20px;display:grid;gap:10px}
+.howto ol{margin:0;padding-left:1.2rem;display:grid;gap:6px;max-width:62ch}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:600;cursor:pointer;border-radius:999px;padding:12px 22px;border:1px solid var(--ink);background:transparent;color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.btn.ghost{border-color:var(--line);color:var(--muted);font-weight:500}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+/* peças e looks */
+.cat{margin-top:34px;display:grid;gap:12px}
+.cat-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:8px}
+.cat-head .count{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.pieces{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.pieces.wide{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.pieces.wide .photo{aspect-ratio:3/2}
+.piece{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-width:0}
+.piece:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.piece.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.piece .cap{padding:9px 11px;font-size:.86rem;line-height:1.35;display:flex;flex-direction:column;gap:4px}
+.piece.on .cap{background:var(--accent-soft)}
+.code{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;color:var(--muted)}
+.photo{position:relative;aspect-ratio:3/4;max-width:100%;width:100%;background:var(--accent-soft);display:grid;place-items:center;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo svg{width:46%;height:auto;color:var(--muted);opacity:.7}
+.photo .soon{position:absolute;left:8px;bottom:8px;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.photo .chk{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:.85rem}
+.photo.sw{display:grid;grid-template-columns:3fr 2fr 1fr;place-items:stretch}
+.cardbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;padding:12px 0;border-block:1px solid var(--line)}
+.tally{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.tally b{color:var(--ink);font-weight:500}
+.filter{display:flex;gap:6px}
+.chip{font:inherit;font-size:.82rem;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:6px 12px}
+.chip.on{border-color:var(--ink);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:20px}
+.look{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.look .body{padding:12px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.look p{margin:0;font-size:.92rem;line-height:1.45;flex:1}
+.look .pick{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.look .pick button{font:inherit;font-size:.74rem;line-height:1.2;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:8px;padding:7px 4px}
+.look .pick button.on[data-v=sim]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.look .pick button.on[data-v=gosto]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.look .pick button.on[data-v=nao]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.look.dim{opacity:.62}
+.look .pick button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* resultado */
+.res-head{display:grid;gap:6px}
+.signature{margin-top:20px;padding:22px 24px;border-radius:14px;background:var(--accent-soft);font-family:var(--f-display);font-size:1.35rem;line-height:1.35;font-style:italic;text-wrap:balance}
+.bars{display:grid;gap:10px;margin-top:22px}
+.bar{display:grid;grid-template-columns:118px 1fr 52px;gap:12px;align-items:center}
+.bar .nm{font-weight:600;font-size:.95rem;display:flex;gap:8px;align-items:center;min-width:0}
+.bar .track{height:14px;background:var(--line);border-radius:7px;overflow:hidden}
+.bar .fill{height:100%;border-radius:7px}
+.bar .pc{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;font-size:.9rem}
+.bar.contra .nm{color:var(--muted)}
+.tag{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;border:1px solid currentColor;border-radius:999px;padding:1px 7px;color:var(--muted)}
+.tag.tri{color:var(--accent)}
+.section{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);display:grid;gap:12px}
+.section p{margin:0;max-width:66ch}
+.section ul{margin:0;padding-left:1.1rem;display:grid;gap:6px;max-width:66ch}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:6px 16px;max-width:66ch;margin:0}
+.kv dt{color:var(--muted);font-size:.88rem}
+.kv dd{margin:0}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-family:var(--f-mono);font-weight:400;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.n{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+th.n{text-align:right}
+.quote{border-left:2px solid var(--accent);padding-left:14px;font-style:italic;max-width:66ch}
+.note{font-size:.85rem;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.confirm{margin-top:12px;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom, 0px));background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.9rem;z-index:20}
+.lock{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);display:grid;gap:8px;max-width:360px}
+.lock label{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lockrow{display:flex;gap:8px}
+.lockrow input{flex:1;min-width:0}
+@media (max-width:620px){
+  .adj{grid-template-columns:repeat(3,1fr)}
+  .adj label:nth-child(7n){border-right:1px solid var(--line)}
+  .adj label:nth-child(3n){border-right:0}
+  .adj label:nth-last-child(-n+7){border-bottom:1px solid var(--line)}
+}
+@media (max-width:560px){
+  .fields{grid-template-columns:1fr}
+  .bar{grid-template-columns:92px 1fr 44px;gap:8px}
+  .kv{grid-template-columns:1fr}
+  .scale{grid-template-columns:repeat(6,1fr)}
+  .opts.tiles{grid-template-columns:1fr 1fr}
+  .pieces{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brandrow">
+      <div class="brand">Assinatura <i>de</i> Estilo</div>
+      <div class="steplabel" id="steplabel"></div>
+    </div>
+    <nav class="ruler" id="ruler" aria-label="Etapas do teste"></nav>
+  </header>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const S = ['n','t','e','r','s','c','d'];
+const NOME = {n:'Esportivo',t:'Tradicional',e:'Refinado',r:'Romântico',s:'Sexy',c:'Criativo',d:'Dramático'};
+
+/* Fotos publicadas em img/<chave>.webp. Peças: "<categoria>-<estilo>"; looks: id do look. Sem foto, o cartão mostra um espaço reservado. */
+const PHOTO = new Set(['BL-n','BL-t','BL-e','BL-r','BL-s','BL-d','BL-c','CA-n','CA-t','CA-e','CA-r','CA-s','CA-c','CA-d','SA-n','SA-t','SA-e','SA-r','SA-s','SA-c','SA-d','PU-n','PU-t','PU-e','PU-r','PU-s','PU-c','PU-d','SP-n','SP-t','SP-e','SP-r','SP-s','SP-c','SP-d','n1','n2','t1','t2','e1','e2','r1','r2','s1','s2','c1','c2','d1','d2','TP-n','TP-t','TP-e','TP-r','TP-s','TP-c','TP-d','AC-n','AC-t','AC-e','AC-r','AC-s','AC-d','AC-c','E2-n','E2-t','E2-e','E2-r','E2-s','E2-c','E2-d']);
+
+/* Paletas da pergunta E1 */
+const PAL = {n:['#c08a5b','#7a7f4f','#d8c6a5','#8b5e3c'],t:['#1f2f4d','#8d9097','#d9c9ab','#f3f1ec'],e:['#f1ece3','#d9bfa3','#1b1a1d','#b58a5c'],r:['#f2c7d1','#c9b8de','#bcd3ea','#f6efe8'],s:['#b3122b','#151316','#5e1424','#d9b49a'],c:['#e0662f','#2f8c84','#f1c84b','#8c3fa2'],d:['#0f0f10','#f6f5f2','#c3102d','#7a7a7e']};
+
+/* Adjetivos da pergunta I5 (5 por estilo) */
+const ADJ = {n:['Leve','Autêntica','Descontraída','Acessível','Espontânea'],t:['Confiável','Sensata','Organizada','Coerente','Competente'],e:['Sofisticada','Refinada','Segura','Impecável','Discreta'],r:['Delicada','Gentil','Doce','Acolhedora','Feminina'],s:['Atraente','Magnética','Confiante','Sensual','Envolvente'],c:['Original','Criativa','Livre','Curiosa','Irreverente'],d:['Poderosa','Marcante','Determinada','Imponente','Moderna']};
+
+/* ---------- PERGUNTAS ---------- */
+const STEPS = [
+ {key:'intro', label:'Início'},
+ {key:'pers', label:'Personalidade', title:'Personalidade', lead:'Responda pensando em como você se vê, e não em como acha que deveria ser.', qs:[
+  {id:'P1',type:'style',text:'Como você descreveria a sua personalidade?',o:{n:'Leve, descomplicada e acolhedora',t:'Confiável, organizada e sensata',e:'Discreta, refinada e segura',r:'Doce, gentil e afetuosa',s:'Magnética, confiante e envolvente',c:'Original, curiosa e imprevisível',d:'Determinada, intensa e marcante'}},
+  {id:'P2',type:'style',text:'Em um grupo, qual papel você costuma assumir?',o:{n:'A que deixa todo mundo à vontade',t:'A que organiza e garante que tudo dê certo',e:'A que observa e fala na hora certa',r:'A que cuida do bem-estar de todos',s:'A que chama atenção sem esforço',c:'A que traz as ideias diferentes',d:'A que lidera e toma as decisões'}},
+  {id:'P3',type:'style',text:'Diante de uma mudança inesperada, você:',o:{n:'Se adapta com tranquilidade e segue o fluxo',t:'Busca entender a situação e montar um plano',e:'Mantém a postura e analisa antes de agir',r:'Pensa primeiro em como as pessoas vão se sentir',s:'Confia no seu instinto e no seu poder de persuasão',c:'Vê ali uma oportunidade de experimentar algo novo',d:'Assume o controle e resolve'}},
+  {id:'P4',type:'style',text:'Qual elogio mais toca você?',o:{n:'“Estar com você é tão leve.”',t:'“Posso sempre contar com você.”',e:'“Você tem muita classe.”',r:'“Você é encantadora.”',s:'“Você é irresistível.”',c:'“Você é muito original.”',d:'“Você impõe respeito.”'}},
+  {id:'P5',type:'contra',text:'Qual destas descrições MENOS combina com você?',o:{n:'Despojada e casual em qualquer situação',t:'Previsível e conservadora',e:'Formal e reservada',r:'Delicada e sonhadora',s:'Provocante e ousada',c:'Excêntrica e fora do padrão',d:'Imponente e dominante'}}
+ ]},
+ {key:'val', label:'Valores', title:'Valores e identidade pessoal', lead:'Aqui o foco é o que dá sentido à sua vida. Seus valores são a base de uma imagem que pareça sua.', qs:[
+  {id:'V1',type:'style',text:'Qual valor é mais inegociável para você?',o:{n:'Liberdade e simplicidade',t:'Estabilidade e responsabilidade',e:'Excelência e qualidade',r:'Afeto e harmonia',s:'Autoconfiança e prazer',c:'Autenticidade e criatividade',d:'Conquista e independência'}},
+  {id:'V2',type:'style',text:'O que faz você se sentir realizada?',o:{n:'Ter tempo para o que gosto, perto de quem amo',t:'Ver a vida organizada e as metas cumpridas',e:'Ser reconhecida pela qualidade do que faço',r:'Ter relações próximas e um lar acolhedor',s:'Sentir-me desejada e segura do meu poder pessoal',c:'Criar algo novo e me expressar livremente',d:'Alcançar destaque e influência'}},
+  {id:'V3',type:'style',text:'Se a sua vida fosse um lugar, seria:',o:{n:'Uma casa de campo com as janelas abertas',t:'Uma biblioteca bem organizada',e:'Um hotel boutique silencioso e impecável',r:'Um jardim florido com café da tarde',s:'Um rooftop ao pôr do sol',c:'Um ateliê cheio de cores e referências',d:'Uma galeria de arte contemporânea'}},
+  {id:'V4',type:'style',text:'Que legado você gostaria de deixar?',o:{n:'Ter vivido de forma leve e verdadeira',t:'Ter sido alguém digna de confiança',e:'Ter feito tudo com elegância e excelência',r:'Ter feito as pessoas se sentirem amadas',s:'Ter vivido intensamente, sem pedir desculpas por ser quem sou',c:'Ter deixado uma marca original no mundo',d:'Ter aberto caminhos e quebrado barreiras'}},
+  {id:'V5',type:'contra',text:'Em qual destes ambientes você se sentiria MAIS deslocada?',o:{n:'Um acampamento rústico, sem maquiagem e sem salto',t:'Um almoço corporativo tradicional, com dress code clássico',e:'Um jantar black-tie em um restaurante estrelado',r:'Um chá da tarde com decoração florida e rendas',s:'Uma festa noturna em que todos usam looks sensuais',c:'Uma feira de arte alternativa, com looks experimentais',d:'Um desfile de moda conceitual, com looks de impacto'}},
+  {id:'V6',type:'open',text:'Quais são as 3 coisas mais importantes da sua vida hoje?'}
+ ]},
+ {key:'comp', label:'Comportamento', title:'Comportamento', lead:'Como você age no dia a dia diz muito sobre o estilo que vai parecer natural em você.', qs:[
+  {id:'C1',type:'style',text:'Como você se arruma num dia comum?',o:{n:'Rápido: priorizo conforto e pronto',t:'Sigo uma rotina com peças que sei que funcionam',e:'Escolho com cuidado, mesmo quando o look é simples',r:'Gosto de um detalhe delicado: um brinco, um laço, uma estampa suave',s:'Escolho algo que valorize meu corpo',c:'Misturo peças de um jeito que ninguém faria',d:'Monto um visual de impacto, mesmo no dia a dia'}},
+  {id:'C2',type:'style',text:'Como você compra roupas?',o:{n:'Só quando preciso, e escolho o que é prático',t:'Planejo e invisto em peças duráveis',e:'Compro pouco, mas de alta qualidade',r:'Me encanto com os detalhes e compro por amor',s:'Busco peças que me façam sentir poderosa e atraente',c:'Garimpo em brechós e marcas autorais',d:'Procuro peças com design forte e diferente'}},
+  {id:'C3',type:'style',text:'Seu fim de semana ideal:',o:{n:'Trilha, praia ou piquenique',t:'Almoço em família e casa em ordem',e:'Exposição, um bom restaurante e um bom vinho',r:'Cinema, café e flores',s:'Jantar a dois e uma noite para dançar',c:'Oficina criativa, show alternativo ou feira de design',d:'Um evento exclusivo ou um lançamento importante'}},
+  {id:'C4',type:'style',text:'Em uma festa, você:',o:{n:'Fica onde está mais tranquilo e conversa com todos',t:'Chega no horário e fica com quem já conhece',e:'Circula com discrição e escolhe bem as conversas',r:'Dá atenção a cada pessoa e se encanta com os detalhes',s:'Dança e aproveita os olhares',c:'Puxa assuntos inusitados e conhece gente nova',d:'É notada assim que entra'}}
+ ]},
+ {key:'est', label:'Estética', title:'Preferências estéticas', lead:'Responda pelo que atrai você, mesmo que ainda não use. Não existe resposta certa.', qs:[
+  {id:'E1',type:'style',vis:'pal',text:'Qual paleta mais atrai você?',o:{n:'Tons terrosos: caramelo, oliva e areia',t:'Azul-marinho, cinza, bege e branco',e:'Off-white, nude, preto e camelo',r:'Rosa-claro, lavanda, azul-bebê e pérola',s:'Vermelho, preto, vinho e nude-pele',c:'Cores vivas em combinações inesperadas',d:'Preto e branco em alto contraste, com uma cor intensa'}},
+  {id:'E2',type:'style',vis:'fxpr',text:'Qual combinação de tecido e estampa mais atrai você?',o:{n:'Malhas de algodão lisas, em branco, preto e cinza',t:'Crepe, lã fria e tweed em neutros e azul-marinho',e:'Cetim de seda, tweed claro e crepe em tons nude',r:'Chiffon floral, renda e babados em tons suaves',s:'Cetim, renda e veludo em vermelho, vinho e preto',c:'Geométricos, florais vibrantes e tweed multicolorido',d:'Couro, alfaiataria e tecido metalizado em preto'}},
+  {id:'E3',type:'style',text:'Qual sapato você escolheria para usar o dia todo?',o:{n:'Tênis ou rasteira',t:'Mocassim ou scarpin de salto médio',e:'Scarpin nude ou sapatilha de couro impecável',r:'Sapatilha com laço ou sandália delicada',s:'Sandália de salto fino',c:'Bota colorida ou sapato de design inusitado',d:'Bota de cano alto ou salto escultural'}},
+  {id:'E4',type:'style',text:'Qual acessório tem mais a sua cara?',o:{n:'Bolsa de palha ou couro natural e pulseiras de fio',t:'Relógio clássico e brinco de pérola pequeno',e:'Joia fina minimalista e bolsa estruturada',r:'Colar delicado com pingente e laço no cabelo',s:'Argolas douradas grandes e cinto marcando a cintura',c:'Peças artesanais, mix de anéis e bolsas inusitadas',d:'Maxicolar escultural e óculos de armação marcante'}},
+  {id:'E5',type:'style',text:'Que modelagem você prefere?',o:{n:'Solta e confortável, com caimento fluido',t:'Reta e alinhada, sem exageros',e:'Ajustada na medida certa, com cortes limpos',r:'Acinturada, com saias rodadas, babados ou franzidos',s:'Justa, marcando as curvas, com fendas ou decotes',c:'Assimétrica, com sobreposições e volumes inesperados',d:'Estruturada, com ombros marcados e linhas fortes'}},
+  {id:'E6',type:'contra',text:'Qual destes looks você NUNCA usaria?',o:{n:'Moletom largo e tênis em um evento',t:'Tailleur tradicional com scarpin de salto baixo',e:'Total look monocromático e minimalista',r:'Vestido rosa com babados e laço',s:'Vestido justo, curto e decotado',c:'Mistura de cinco estampas diferentes',d:'Look todo preto, com ombreiras e maquiagem marcante'}}
+ ]},
+ {key:'img', label:'Imagem', title:'Imagem percebida × imagem desejada', lead:'Como você sente que é vista hoje e como gostaria de ser vista. A distância entre as duas é onde a consultoria vai trabalhar.', qs:[
+  {id:'I1',type:'perc',text:'Pelo retorno que você costuma receber, como as pessoas percebem você à primeira vista?',o:{n:'Simples e acessível',t:'Séria e confiável',e:'Sofisticada e um pouco distante',r:'Doce e delicada',s:'Sensual e confiante',c:'Diferente e criativa',d:'Forte e intimidadora'}},
+  {id:'I2',type:'style',text:'E como você GOSTARIA de ser percebida à primeira vista?',o:{n:'Leve, autêntica e acessível',t:'Confiável, competente e coerente',e:'Sofisticada, refinada e segura',r:'Gentil, feminina e acolhedora',s:'Atraente, confiante e magnética',c:'Original, criativa e livre',d:'Poderosa, marcante e inesquecível'}},
+  {id:'I3',type:'style',text:'Em uma reunião importante, o que você quer que pensem de você?',o:{n:'“Ela é genuína.”',t:'“Ela é preparada e confiável.”',e:'“Ela tem um padrão alto.”',r:'“Ela é gentil e humana.”',s:'“Ela é segura de si.”',c:'“Ela pensa diferente.”',d:'“Ela está no comando.”'}},
+  {id:'I4',type:'style',text:'Qual destas mulheres você mais admira pela imagem?',o:{n:'A viajante que vive com uma mochila e um sorriso',t:'A executiva respeitada pela consistência',e:'A anfitriã impecável de um evento refinado',r:'A poetisa que ainda escreve cartas à mão',s:'A mulher que entra no salão e todos se viram',c:'A artista que transforma tudo o que toca',d:'A diretora criativa que dita tendências'}},
+  {id:'I5',type:'adj',text:'Escolha as 3 palavras que você mais quer que as pessoas associem à sua imagem.',hint:'Marque exatamente 3.'},
+  {id:'I6',type:'open',text:'Qual é a maior diferença entre como você é vista hoje e como gostaria de ser vista?'}
+ ]},
+ {key:'emo', label:'Relação', title:'Relação emocional com a própria imagem', lead:'Estas respostas ficam entre você e a consultora. Elas ajudam a medir sua evolução ao longo do processo.', qs:[
+  {id:'R1',type:'scale',text:'Hoje, quão satisfeita você está com a sua imagem?',lo:'Nada satisfeita',hi:'Totalmente satisfeita'},
+  {id:'R2',type:'scale',text:'Quão segura você se sente ao escolher o que vestir?',lo:'Nada segura',hi:'Totalmente segura'},
+  {id:'R3',type:'scale',text:'O quanto a sua imagem atual representa quem você é por dentro?',lo:'Nada',hi:'Totalmente'},
+  {id:'R4',type:'style',text:'Em que momento você se sente mais bonita?',o:{n:'Ao natural, depois de um dia ao ar livre',t:'Bem arrumada e alinhada para um compromisso',e:'Quando cada detalhe do visual está impecável',r:'Com um vestido leve e o cabelo solto',s:'Quando me sinto desejada',c:'Quando uso algo que ninguém mais usaria',d:'Quando meu visual causa impacto'}},
+  {id:'R5',type:'choice',text:'Que sentimento mais aparece quando você se olha no espelho antes de sair?',opts:['Confiança','Alegria','Indiferença','Dúvida','Cobrança','Insegurança']},
+  {id:'R6',type:'multi',text:'O que mais impede você de se vestir como gostaria?',hint:'Marque quantas quiser.',opts:['Falta de tempo','Insegurança com o corpo','Medo do julgamento','Não saber combinar as peças','Orçamento','Ambiente de trabalho restritivo','Não saber qual é o meu estilo']},
+  {id:'R7',type:'open',text:'Existe alguma peça ou estilo que você deseja usar, mas não se permite? Por quê?'}
+ ]},
+ {key:'pecas', label:'Peças', title:'Peças que você mais gosta', lead:'Em cada categoria, toque nas 2 peças que você mais gostaria de usar. Se só uma agradar, escolha só uma.'},
+ {key:'looks', label:'Looks', title:'Looks completos', lead:'Para cada look, decida rápido, pela primeira impressão: “Sou eu”, “Gosto, mas não sou eu” ou “Não sou eu”.'},
+ {key:'res', label:'Resultado'}
+];
+
+/* ---------- PEÇAS (1 por estilo em cada categoria) ---------- */
+const CATS = [
+ {id:'BL',nm:'Blusas e camisas',ic:'blusa',o:{n:'Camiseta de algodão lisa, de caimento solto',t:'Camisa social branca de algodão',e:'Blusa de seda lisa com decote canoa',r:'Blusa de renda com gola de babado',s:'Body ajustado com decote em V',c:'Bata bordada com mangas amplas',d:'Camisa branca de gola exagerada e punhos marcados'}},
+ {id:'CA',nm:'Calças',ic:'calca',o:{n:'Jeans reto de lavagem média',t:'Calça reta de alfaiataria azul-marinho',e:'Pantalona de lã fria com vinco',r:'Pantacourt fluida em rosa-claro',s:'Calça skinny de couro preta',c:'Pantalona de estampa étnica',d:'Calça de cintura altíssima, corte reto e marcado'}},
+ {id:'SA',nm:'Saias',ic:'saia',o:{n:'Saia longa de algodão fluida',t:'Saia evasê na altura do joelho',e:'Saia lápis midi de crepe',r:'Saia plissada midi lavanda',s:'Saia justa com fenda lateral',c:'Saia assimétrica de patchwork',d:'Saia de couro com recortes geométricos'}},
+ {id:'PU',nm:'Peças únicas',ic:'vestido',o:{n:'Macacão utilitário de sarja',t:'Vestido chemise listrado com cinto fino',e:'Vestido tubinho preto',r:'Vestido floral com mangas bufantes',s:'Vestido envelope justo',c:'Vestido assimétrico estampado',d:'Macacão de alfaiataria com ombros estruturados'}},
+ {id:'TP',nm:'Terceira peça',ic:'casaco',o:{n:'Cardigã de tricô grosso',t:'Blazer clássico azul-marinho',e:'Casaco longo de lã camelo',r:'Cardigã curto com botões de pérola',s:'Blazer acinturado preto',c:'Kimono bordado',d:'Sobretudo longo de linhas retas'}},
+ {id:'SP',nm:'Sapatos',ic:'sapato',o:{n:'Tênis branco de lona',t:'Mocassim de couro',e:'Scarpin nude de bico fino',r:'Sapatilha com laço',s:'Sandália de salto fino',c:'Bota colorida estampada',d:'Bota de cano alto de couro'}},
+ {id:'AC',nm:'Acessórios e joias',ic:'joia',o:{n:'Pulseiras de fio e colar de sementes',t:'Relógio clássico e brinco de pérola pequeno',e:'Joia fina minimalista em ouro',r:'Colar delicado com pingente e laço no cabelo',s:'Argolas douradas grandes',c:'Mix de anéis e brincos artesanais',d:'Maxicolar escultural e óculos de armação marcante'}}
+];
+const ICON = {
+ blusa:'<path d="M14 10l8-4h4l8 4 6 8-6 4-3-3v23H17V19l-3 3-6-4z"/>',
+ calca:'<path d="M15 6h18l2 36h-8l-3-24-3 24h-8z"/>',
+ saia:'<path d="M17 8h14l7 32H10z"/>',
+ vestido:'<path d="M19 6h10l-2 8 9 28H12l9-28z"/>',
+ casaco:'<path d="M14 8l6-3 4 8 4-8 6 3 4 34H10z"/><path d="M24 13v29"/>',
+ sapato:'<path d="M6 34c0-7 2-13 6-15 4 6 12 8 22 8 6 0 8 3 8 6v3H6z"/>',
+ bolsa:'<path d="M10 18h28l-3 22H13z"/><path d="M18 18c0-6 2-9 6-9s6 3 6 9"/>',
+ joia:'<path d="M12 8c0 12 5 18 12 18s12-6 12-18"/><circle cx="24" cy="31" r="5"/>',
+ look:'<path d="M24 10a3 3 0 1 1 3 3c-2 0-3 1-3 3v2"/><path d="M24 18L6 32h36z"/>'
+};
+
+/* ---------- LOOKS COMPLETOS (2 por estilo; a lista abaixo é cortada após os ajustes) ---------- */
+const CARDS = [
+ {id:'n1',s:'n',c:['#d9c8a9','#a68a63','#6f7a55'],t:'Camisa de linho areia, calça pantalona de algodão e rasteira de couro'},
+ {id:'n2',s:'n',c:['#dfe4ea','#4f6d8f','#c9a87c'],t:'Jeans reto, camiseta branca básica, tênis e bolsa de palha'},
+ {id:'n3',s:'n',c:['#7d8456','#c9bc9a','#8a6a48'],t:'Vestido midi de malha verde-oliva, solto, com sandália baixa'},
+ {id:'n4',s:'n',c:['#b8a27a','#6b5235','#e8dfcd'],t:'Macacão utilitário cáqui com cinto de couro cru'},
+ {id:'n5',s:'n',c:['#e6dccb','#9b8a74','#5c6b4f'],t:'Cardigã de tricô grosso, regata canelada e calça de sarja'},
+ {id:'n6',s:'n',c:['#c98f5e','#f1ebe0','#8d6b4f'],t:'Saia longa de algodão fluida, bata branca e colares de sementes'},
+ {id:'t1',s:'t',c:['#1f2f4d','#f3f1ec','#6b4a2e'],t:'Camisa social branca, calça de alfaiataria azul-marinho e mocassim'},
+ {id:'t2',s:'t',c:['#d8c8ad','#8b8d91','#f1ece3'],t:'Cardigã twinset bege com saia lápis cinza'},
+ {id:'t3',s:'t',c:['#24365a','#c3ab84','#3b2a22'],t:'Blazer azul-marinho, calça reta cáqui e scarpin de salto médio'},
+ {id:'t4',s:'t',c:['#2c4a74','#f2efe8','#8b2e3a'],t:'Vestido chemise listrado com cinto fino'},
+ {id:'t5',s:'t',c:['#bfa27a','#4c4f57','#e9e3d6'],t:'Trench coat clássico sobre suéter de gola redonda e calça escura'},
+ {id:'t6',s:'t',c:['#6e1f2c','#2a3550','#f0ebe2'],t:'Camisa polo, saia evasê na altura do joelho e brinco de pérola'},
+ {id:'e1',s:'e',c:['#efe9df','#d7c3ab','#a8896a'],t:'Conjunto de alfaiataria off-white com scarpin nude'},
+ {id:'e2',s:'e',c:['#18171a','#cdb27a','#e9e4dc'],t:'Vestido tubinho preto, joias finas e bolsa estruturada'},
+ {id:'e3',s:'e',c:['#e5d3b3','#5d5a57','#b59c7b'],t:'Blusa de seda champanhe, calça pantalona de lã fria e mule de couro'},
+ {id:'e4',s:'e',c:['#b48a5a','#f1ebe1','#1d1c1f'],t:'Casaco de lã camelo sobre blusa de gola alta e calça reta preta'},
+ {id:'e5',s:'e',c:['#c9c6c3','#9c9894','#e8e6e3'],t:'Vestido envelope de crepe cinza-pérola com sandália minimalista'},
+ {id:'e6',s:'e',c:['#e3d4bf','#c8b294','#8f765b'],t:'Total look monocromático em tons de bege, com cinto fino de couro'},
+ {id:'r1',s:'r',c:['#f3c9d3','#9fb88f','#fdf3f2'],t:'Vestido floral midi com mangas bufantes'},
+ {id:'r2',s:'r',c:['#f6dbe0','#fbf7f2','#d9a7b4'],t:'Blusa de renda com saia rodada rosa-claro'},
+ {id:'r3',s:'r',c:['#c8b8dd','#f4eef3','#d9c0a4'],t:'Saia plissada lavanda, cardigã curto e sapatilha com laço'},
+ {id:'r4',s:'r',c:['#eab8c4','#f8eef0','#c98b9d'],t:'Vestido de chiffon com babados e laço na cintura'},
+ {id:'r5',s:'r',c:['#fdfaf5','#bfd3e6','#e9cfd6'],t:'Camisa com gola de babado, saia de tule e brinco de pérola'},
+ {id:'r6',s:'r',c:['#2f3d63','#fbf6f0','#e7b3bf'],t:'Vestido de poá com decote coração e sandália delicada'},
+ {id:'s1',s:'s',c:['#b3122b','#1b1416','#d9a35a'],t:'Vestido justo vermelho com decote em V e sandália de salto fino'},
+ {id:'s2',s:'s',c:['#141215','#2b2226','#d7b8a3'],t:'Calça de couro preta, body de renda e blazer acinturado'},
+ {id:'s3',s:'s',c:['#1c1a1d','#dcc0a5','#7d1a2c'],t:'Saia lápis com fenda, blusa de cetim e scarpin'},
+ {id:'s4',s:'s',c:['#5e1424','#8e2a3b','#cfa98a'],t:'Slip dress de cetim vinho com sandália de tiras finas'},
+ {id:'s5',s:'s',c:['#3d5a80','#111014','#c8a27e'],t:'Jeans skinny de cintura alta, cropped ajustado e salto'},
+ {id:'s6',s:'s',c:['#c49a5e','#2a1d14','#e7d2b3'],t:'Vestido envelope em animal print, marcando a cintura'},
+ {id:'c1',s:'c',c:['#e0662f','#2f8c84','#f1c84b'],t:'Macacão estampado com colete de crochê e tênis colorido'},
+ {id:'c2',s:'c',c:['#f1c232','#3d6db5','#c2493f'],t:'Saia de patchwork, camisa oversized e botas amarelas'},
+ {id:'c3',s:'c',c:['#2d7a5f','#e88a9c','#f2b33d'],t:'Mistura de listras e florais, com turbante e brincos artesanais'},
+ {id:'c4',s:'c',c:['#8c3fa2','#ff8a3d','#36a3a0'],t:'Vestido assimétrico em cores vivas com sobreposição de colares'},
+ {id:'c5',s:'c',c:['#1f3f6e','#c9773a','#7fa36b'],t:'Kimono bordado sobre jeans destroyed e chapéu de aba larga'},
+ {id:'c6',s:'c',c:['#b5462e','#e9c46a','#264653'],t:'Calça pantalona de estampa étnica, blusa tingida à mão e mix de anéis'},
+ {id:'d1',s:'d',c:['#0f0f10','#3a3a3d','#e8e6e3'],t:'Blazer de ombros estruturados, calça de couro preta e bota de cano alto'},
+ {id:'d2',s:'d',c:['#f4f3f1','#111112','#c41e3a'],t:'Vestido geométrico preto e branco com maxibrinco escultural'},
+ {id:'d3',s:'d',c:['#0b0b0c','#262628','#8a8a8f'],t:'Look total black com sobretudo longo e óculos de armação marcante'},
+ {id:'d4',s:'d',c:['#c3102d','#111113','#e9e4e0'],t:'Macacão vermelho de alfaiataria com cinto largo'},
+ {id:'d5',s:'d',c:['#1736a8','#0e0e10','#f2f0ec'],t:'Vestido de volume arquitetônico em azul intenso'},
+ {id:'d6',s:'d',c:['#f6f5f2','#0d0d0e','#9a9a9e'],t:'Camisa branca de gola exagerada, calça de cintura altíssima e salto escultural'}
+];
+
+/* Descrições das fotos enviadas pela consultora */
+const OVR_P = {
+ BL:{n:'Regata canelada azul-marinho',t:'Camisa branca de botões',e:'Blusa transpassada com nó lateral',r:'Blusa floral com laço e babados',s:'Blusa frente única de cetim',d:'Top de um ombro só com babado escultural',c:'Camisa oversized de estampa abstrata em pink e laranja'},
+ CA:{n:'Jeans de pernas largas, lavagem clara',t:'Pantalona de alfaiataria azul-marinho com pregas',e:'Calça reta preta de alfaiataria com pregas',r:'Calça rosé com laço na cintura',s:'Calça reta de couro preta',c:'Pantalona de poá preto e branco',d:'Jeans barrel de modelagem curva'},
+ SA:{n:'Minissaia jeans',t:'Saia lápis cinza de alfaiataria',e:'Saia midi off-white com acabamento em contraste',r:'Saia midi plissada off-white',s:'Saia de paetês com drapeado e fenda',c:'Saia rodada vermelha',d:'Saia assimétrica com drapeado escultural'},
+ PU:{n:'Macacão pantalona de crochê mostarda',t:'Vestido preto básico sem mangas',e:'Vestido off-white drapeado e assimétrico',r:'Vestido midi floral de tecido leve',s:'Vestido midi de cetim com bojo',c:'Vestido rodado de estampa floral vibrante',d:'Vestido midi azul-marinho com franzido lateral e fenda'},
+ TP:{n:'Jaqueta jeans clássica',t:'Blazer azul-marinho de um botão',e:'Trench coat de couro caramelo com faixa',r:'Jaqueta de tweed rosa com botões de pérola',s:'Jaqueta curta de pelo em animal print',c:'Colete longo assimétrico com estampa de folhagens',d:'Blazer curto pied-de-poule com botões dourados'},
+ AC:{n:'Brincos de bolinha, pingente redondo e bracelete liso em ouro',t:'Colar riviera, brincos de ponto de luz e relógio dourado',e:'Colar rígido com gota, argolas cravejadas e anel solitário',r:'Colar de pérolas, laço de renda e brincos de flor',s:'Brincos de franja de cristais, choker riviera e anel cravejado',d:'Brincos esculturais, colares mistos com pingente preto e anel cruzado',c:'Colar de contas coloridas, anel de resina e mix de pulseiras'},
+ SP:{n:'Tênis branco',t:'Mocassim off-white com corrente',e:'Slingback de bico fino em couro marrom',r:'Sapatilha matelassê com laço',s:'Sandália dourada de salto fino',c:'Sapato boneca em pelo de vaca com fivela vermelha',d:'Tamanco de dedo com salto escultural dourado'}
+};
+CATS.forEach(cat=>Object.assign(cat.o,OVR_P[cat.id]||{}));
+const OVR_L = {
+ n1:'Camisa xadrez aberta, camiseta branca, jeans dobrado, tênis e ecobag',
+ n2:'Regata vinho, short de linho branco e rasteira',
+ t1:'Colete de alfaiataria off-white, saia plissada azul-marinho e scarpin nude',
+ t2:'Camisa azul-marinho, calça de alfaiataria cinza e scarpin preto',
+ e2:'Blazer azul-marinho, camisa branca, jeans pantalona e bolsa de couro',
+ e1:'Blusa frente única off-white, pantalona marrom de cintura alta e bolsa pequena de couro',
+ r1:'Blusa branca de mangas bufantes e saia plissada verde-menta',
+ r2:'Blusa lilás de mangas bufantes, calça verde-menta e bolsa de palha',
+ s1:'Blusa de um ombro só, saia de couro com fenda e bota de cano alto',
+ s2:'Macacão de cetim vinho com decote drapeado e sandália de tiras',
+ c1:'Blazer xadrez preto e branco, calça pink e mocassim',
+ c2:'Casaco pink, colete de tricô com flores e calça verde-oliva',
+ d1:'Blazer oversized preto, camiseta branca, jeans barrel e scarpin',
+ d2:'Blazer off-white com cinto, calça saruel marrom e sandália de salto'
+};
+CARDS.forEach(c=>{if(OVR_L[c.id])c.t=OVR_L[c.id];});
+/* 2 looks por estilo (14 no total) */
+CARDS.splice(0,CARDS.length,...CARDS.filter(c=>Number(c.id.slice(1))<=2));
+
+/* ---------- PERFIS (devolutiva) ---------- */
+const P = {
+ n:{ess:'leveza, autenticidade e conforto',tr:'espontaneidade, simplicidade e uma presença acolhedora, que deixa as pessoas à vontade',val:'liberdade, praticidade e conexão com o que é verdadeiro',pc:'jeans reto, camisas de linho, malhas macias, vestidos fluidos, tênis e rasteiras',tec:'linho, algodão, malha e couro natural',cor:'tons terrosos, verdes, areia e cores lavadas',oc:'dia a dia, lazer e ambientes de trabalho mais informais',com:'acessibilidade, verdade e descontração',exc:'pode ser lido como desleixo em ambientes que pedem mais estrutura',contra:'o básico e despojado em excesso: peças largas demais, pouco acabamento e conforto acima de tudo'},
+ t:{ess:'consistência, confiabilidade e discrição',tr:'organização, responsabilidade e senso de coerência',val:'estabilidade, compromisso e segurança',pc:'camisas, calças retas de alfaiataria, blazers clássicos, saias lápis e evasê, mocassins e scarpins de salto médio',tec:'sarja, tricô, algodão encorpado e lã',cor:'azul-marinho, cinza, bege, branco e vinho',oc:'ambientes corporativos, reuniões e compromissos em que a credibilidade é decisiva',com:'seriedade, competência e credibilidade',exc:'pode parecer rígido, previsível ou mais velho do que você é',contra:'o conservador e previsível: combinações certinhas demais, peças com cara de uniforme e pouca personalidade'},
+ e:{ess:'refinamento, qualidade e sofisticação',tr:'discrição, autocontrole e atenção aos detalhes',val:'excelência, bom gosto e respeito',pc:'alfaiataria de corte impecável, tubinhos, blusas de seda, casacos estruturados e joias finas',tec:'seda, crepe, lã fria e cashmere',cor:'neutros sofisticados: off-white, nude, camelo, preto e cinza-pérola',oc:'eventos, reuniões de alto nível, jantares e situações em que se quer autoridade com sutileza',com:'classe, autoridade e padrão alto',exc:'pode soar distante, frio ou inacessível',contra:'o formal e reservado: produções muito controladas, minimalismo em excesso e um ar de distância'},
+ r:{ess:'delicadeza, afeto e feminilidade',tr:'gentileza, sensibilidade e cuidado com as pessoas',val:'harmonia, afeto e beleza',pc:'vestidos fluidos, saias rodadas e plissadas, blusas com babados, laços e rendas',tec:'chiffon, renda, tule, viscose e tricô fino',cor:'tons pastel, rosa, lavanda, pérola e florais delicados',oc:'encontros, eventos diurnos e ambientes acolhedores',com:'doçura, acolhimento e gentileza',exc:'pode parecer infantil ou frágil em contextos que pedem firmeza',contra:'o delicado e sonhador: babados, laços, estampas fofas e tons pastel em excesso'},
+ s:{ess:'sensualidade, confiança e magnetismo',tr:'autoconfiança, intensidade e prazer em ser notada',val:'liberdade de ser quem é, autoestima e prazer',pc:'peças ajustadas ao corpo, decotes estratégicos, fendas, saias lápis, vestidos envelope e saltos finos',tec:'malhas com elastano, cetim, couro macio e renda',cor:'vermelho, preto, vinho, nude-pele e dourado',oc:'noites, encontros, festas e momentos em que você quer se sentir poderosa',com:'segurança, atração e presença',exc:'pode desviar a atenção da sua competência em ambientes profissionais',contra:'o provocante e ousado: peças muito justas, decotes e fendas evidentes e foco no corpo'},
+ c:{ess:'originalidade, liberdade e expressão',tr:'curiosidade, imaginação e prazer em fazer diferente',val:'autenticidade, criatividade e liberdade de expressão',pc:'mix de estampas, peças autorais e artesanais, sobreposições, kimonos, acessórios marcantes e garimpos',tec:'texturas variadas, bordados, crochê, patchwork e tecidos tingidos à mão',cor:'cores vivas e combinações pouco óbvias',oc:'ambientes criativos, eventos culturais, lazer e trabalhos que valorizam a originalidade',com:'originalidade, abertura e personalidade',exc:'pode parecer desorganizado ou difícil de ler em ambientes formais',contra:'o excêntrico e fora do padrão: muita informação, mistura de estampas e combinações imprevisíveis'},
+ d:{ess:'impacto, força e modernidade',tr:'determinação, liderança e uma presença que não passa despercebida',val:'conquista, independência e influência',pc:'blazers estruturados, peças de design forte, sobretudos longos, acessórios esculturais e botas de cano alto',tec:'couro, neoprene, lã estruturada e tecidos encorpados',cor:'preto e branco em alto contraste, cores intensas e blocos de cor',oc:'eventos de destaque, apresentações, posições de liderança e momentos em que você precisa ser lembrada',com:'poder, autoridade e modernidade',exc:'pode intimidar ou criar distância',contra:'o imponente e dominante: volumes exagerados, linhas duras e visual de impacto'}
+};
+
+/* ---------- utilidades ---------- */
+function hash(s){let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function shuffled(arr,seed){const r=rng(hash(seed));const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function esc(s){return String(s??'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
+function toArr(v){return Array.isArray(v)?v:(v==null||v===''?[]:[v]);}
+function lista(arr){return arr.length<=1?arr.join(''):arr.slice(0,-1).join(', ')+' e '+arr.at(-1);}
+const LET='ABCDEFG';
+const LIM=['style','contra','perc','choice'];
+const DECK = shuffled(CARDS,'cartoes-v1').map((c,i)=>Object.assign({code:'LK'+String(i+1).padStart(2,'0')},c));
+const PIECES = CATS.flatMap(cat=>shuffled(S,'cat-'+cat.id).map((k,i)=>({code:cat.id+(i+1),cat:cat.id,s:k,t:cat.o[k],ic:cat.ic})));
+const PIECE = Object.fromEntries(PIECES.map(p=>[p.code,p]));
+/* Só entram no teste as peças e looks que já têm foto */
+const VPIECES = PIECES.filter(p=>PHOTO.has(p.cat+'-'+p.s));
+const VCATS = CATS.filter(cat=>VPIECES.some(p=>p.cat===cat.id));
+const VDECK = DECK.filter(c=>PHOTO.has(c.id));
+const PIECE_AV = Object.fromEntries(S.map(k=>[k,VPIECES.filter(p=>p.s===k).length]));
+const LOOK_AV = Object.fromEntries(S.map(k=>[k,VDECK.filter(c=>c.s===k).length]));
+const ADJLIST = shuffled(S.flatMap(k=>ADJ[k].map(w=>k+'|'+w)),'adjetivos-v1');
+const ALLQ = STEPS.flatMap(s=>s.qs||[]);
+const Q = Object.fromEntries(ALLQ.map(q=>[q.id,q]));
+
+const KEY='assinatura-estilo-fem-v2';
+let UNLOCK=false;
+const PASS=['8fec19c1eb5fbd5ef83509362d0032928cad3e911023f52a6ced01b69a169354','84f4e825613eba1edfb8ad07a2a2ee929fc817f76e8e6377a85b9dd6749fb67a'];
+STEPS[STEPS.length-1].label='Fim';
+async function sha(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('');}
+function renderFim(){
+  const R=compute(), nome=(st.info.nome||'').trim().split(' ')[0];
+  const missing=R.totalQ-R.answered, looksLeft=VDECK.filter(c=>!st.cards[c.id]).length, catsLeft=VCATS.filter(c=>!toArr(st.pecas[c.id]).length).length;
+  const gaps=[missing>0?`${missing} pergunta(s)`:'',catsLeft>0?`${catsLeft} categoria(s) de peças`:'',looksLeft>0?`${looksLeft} look(s)`:''].filter(Boolean);
+  return `<div class="eyebrow">Teste concluído</div><h1>Obrigada${nome?', '+esc(nome):''}!</h1>
+  <p class="lead">Suas respostas foram registradas. Agora é só chamar a sua consultora para continuar.</p>
+  ${gaps.length?`<p class="note">Ainda sem resposta: ${lista(gaps)}. Se quiser, volte e complete.</p>`:''}
+  <div class="nav"><button class="btn ghost" type="button" data-act="prev">Voltar e revisar</button><span></span></div>
+  <form id="lockform" class="lock" autocomplete="off">
+    <label for="f-senha">Área da consultora</label>
+    <div class="lockrow"><input type="password" id="f-senha" placeholder="Senha" autocomplete="off"><button class="btn" type="submit">Ver resultado</button></div>
+    <p class="note" id="lockmsg" hidden>Senha incorreta. Tente de novo.</p>
+  </form>`;
+}
+document.addEventListener('submit',async e=>{
+  if(e.target.id!=='lockform')return; e.preventDefault();
+  const v=document.getElementById('f-senha').value.trim().toLowerCase().replace(/\s+/g,'');
+  if(PASS.includes(await sha(v))){UNLOCK=true;render();window.scrollTo({top:0,behavior:'instant'});}
+  else{document.getElementById('lockmsg').hidden=false;}
+});
+let st = {step:0, info:{nome:'',data:''}, a:{}, cards:{}, pecas:{}, filter:'todos'};
+try{const raw=localStorage.getItem(KEY); if(raw) st=Object.assign(st,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+
+/* ---------- render ---------- */
+const main=document.getElementById('main');
+function render(){
+  const s=STEPS[st.step];
+  document.getElementById('steplabel').textContent = `Etapa ${st.step+1} de ${STEPS.length} · ${s.label}`;
+  document.getElementById('ruler').innerHTML = STEPS.map((x,i)=>`<button type="button" data-go="${i}" class="${i===st.step?'cur':i<st.step?'done':''}" aria-label="${esc(x.label)}" title="${esc(x.label)}"></button>`).join('');
+  if(s.key==='intro') main.innerHTML=renderIntro();
+  else if(s.key==='pecas') main.innerHTML=renderPecas(s);
+  else if(s.key==='looks') main.innerHTML=renderLooks(s);
+  else if(s.key==='res') main.innerHTML=UNLOCK?renderResult():renderFim();
+  else main.innerHTML=renderBlock(s);
+}
+function nav(){
+  const last = st.step===STEPS.length-2;
+  return `<div class="nav">${st.step>0?'<button class="btn ghost" type="button" data-act="prev">Voltar</button>':'<span></span>'}
+  <button class="btn primary" type="button" data-act="next">${st.step===0?'Começar':last?'Finalizar':'Continuar'}</button></div>`;
+}
+function photo(key,icon,sw,on){
+  const url=PHOTO.has(key)?'img/'+key+'.webp':null;
+  if(url) return `<div class="photo"><img src="${esc(url)}" alt="" loading="lazy">${on?'<span class="chk">✓</span>':''}</div>`;
+  if(sw) return `<div class="photo sw" aria-hidden="true">${sw.map(x=>`<span style="background:${x}"></span>`).join('')}</div>`;
+  return `<div class="photo" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">${ICON[icon]}</svg><span class="soon">Foto em breve</span>${on?'<span class="chk">✓</span>':''}</div>`;
+}
+function renderIntro(){
+  return `<div class="eyebrow">Consultoria de imagem e estilo · público feminino</div>
+  <h1>Descubra a sua <em>assinatura</em> de estilo</h1>
+  <p class="lead">Este teste identifica sua tríade de estilo, ou seja, os três estilos que mais representam você, e o seu contra-estilo, aquele com que você menos se identifica. São 34 perguntas em 6 blocos, seguidas de uma escolha visual de peças e de looks completos. Leva cerca de 35 minutos.</p>
+  <div class="fields">
+    <label for="f-nome">Nome da cliente<input type="text" id="f-nome" data-info="nome" value="${esc(st.info.nome)}" autocomplete="off"></label>
+    <label for="f-data">Data<input type="date" id="f-data" data-info="data" value="${esc(st.info.data)}"></label>
+  </div>
+  <div class="howto"><h3>Como responder</h3><ol>
+    <li>Responda pensando em como você se vê hoje, e não em quem acha que deveria ser.</li>
+    <li>Você pode marcar até 2 alternativas por pergunta. Se só uma representar você, marque só uma.</li>
+    <li>Nas peças e nos looks, decida rápido. A primeira impressão é a mais verdadeira.</li>
+    <li>Suas respostas ficam salvas neste navegador, então dá para pausar e voltar depois.</li>
+  </ol></div>${nav()}`;
+}
+function renderBlock(s){
+  const qs=s.qs.map(q=>renderQ(q)).join('');
+  const bi=STEPS.filter(x=>x.qs).indexOf(s)+1;
+  return `<div class="eyebrow">Bloco ${bi} de 6</div><h2>${esc(s.title)}</h2><p class="lead" style="margin-top:8px">${esc(s.lead)}</p>
+  <div class="qlist">${qs}</div>${nav()}`;
+}
+function visHtml(q,k){
+  if(q.vis==='fxpr'){const key=q.id+'-'+k; if(PHOTO.has(key)) return `<span class="vis photo-vis" aria-hidden="true"><img src="img/${key}.webp" alt=""></span>`; return `<span class="vis duo" aria-hidden="true"><span class="fx-${k}"></span><span class="pr-${k}"></span></span>`;}
+  if(q.vis==='pal') return `<span class="vis pal" aria-hidden="true">${PAL[k].map(x=>`<span style="background:${x}"></span>`).join('')}</span>`;
+  return `<span class="vis ${q.vis}-${k}" aria-hidden="true"></span>`;
+}
+function renderQ(q){
+  const hint=q.hint||(LIM.includes(q.type)?'Escolha até 2 alternativas.':'');
+  const head=`<legend><span class="qn">${q.id}</span><span>${esc(q.text)}</span></legend>${hint?`<p class="hint">${esc(hint)}</p>`:''}`;
+  const v=st.a[q.id], arr=toArr(v);
+  if(q.type==='style'||q.type==='contra'||q.type==='perc'){
+    const order=shuffled(S,'q-'+q.id);
+    if(q.vis) return `<fieldset>${head}<div class="opts tiles">${order.map((k,i)=>`<label class="opt tile ${arr.includes(k)?'on':''}"><input type="checkbox" name="${q.id}" value="${k}" ${arr.includes(k)?'checked':''}>${visHtml(q,k)}<span class="tx"><span class="let">${LET[i]}</span>${q.vis==='fxpr'?'':`<span>${esc(q.o[k])}</span>`}</span></label>`).join('')}</div></fieldset>`;
+    return `<fieldset>${head}<div class="opts">${order.map((k,i)=>`<label class="opt ${arr.includes(k)?'on':''}"><input type="checkbox" name="${q.id}" value="${k}" ${arr.includes(k)?'checked':''}><span class="let">${LET[i]}</span><span>${esc(q.o[k])}</span></label>`).join('')}</div></fieldset>`;
+  }
+  if(q.type==='choice'||q.type==='multi'){
+    return `<fieldset>${head}<div class="opts">${q.opts.map((o,i)=>`<label class="opt ${arr.includes(o)?'on':''}"><input type="checkbox" name="${q.id}" value="${esc(o)}" ${arr.includes(o)?'checked':''}><span class="let">${LET[i]}</span><span>${esc(o)}</span></label>`).join('')}</div></fieldset>`;
+  }
+  if(q.type==='adj'){
+    return `<fieldset>${head}<div class="adj">${ADJLIST.map(x=>`<label class="${arr.includes(x)?'on':''}"><input type="checkbox" name="${q.id}" value="${esc(x)}" ${arr.includes(x)?'checked':''}>${esc(x.split('|')[1])}</label>`).join('')}</div></fieldset>`;
+  }
+  if(q.type==='scale'){
+    let b='';for(let i=0;i<=10;i++){b+=`<label class="${v===i?'on':''}"><input type="radio" name="${q.id}" value="${i}" ${v===i?'checked':''}>${i}</label>`;}
+    return `<fieldset>${head}<div class="scale">${b}</div><div class="scaleends"><span>0 · ${esc(q.lo)}</span><span>10 · ${esc(q.hi)}</span></div></fieldset>`;
+  }
+  if(q.type==='open'){
+    return `<fieldset>${head}<textarea id="t-${q.id}" data-open="${q.id}" aria-label="${esc(q.text)}">${esc(v||'')}</textarea></fieldset>`;
+  }
+  return '';
+}
+function renderPecas(s){
+  const done=VCATS.filter(c=>toArr(st.pecas[c.id]).length).length;
+  return `<div class="eyebrow">Etapa visual 1 de 2 · ${VCATS.length} categorias</div><h2>${esc(s.title)}</h2><p class="lead" style="margin-top:8px">${esc(s.lead)}</p>
+  <p class="note">${done} de ${VCATS.length} categorias respondidas.</p>
+  ${VCATS.map(cat=>{const sel=toArr(st.pecas[cat.id]);return `<section class="cat"><div class="cat-head"><h3>${esc(cat.nm)}</h3><span class="count">${sel.length}/2 escolhidas</span></div>
+   <div class="pieces${cat.id==='AC'?' wide':''}">${VPIECES.filter(p=>p.cat===cat.id).map(p=>{const on=sel.includes(p.code);return `<button type="button" class="piece ${on?'on':''}" data-piece="${p.code}" aria-pressed="${on}">${photo(p.cat+'-'+p.s,p.ic,null,on)}<span class="cap"><span class="code">${p.code}</span></span></button>`;}).join('')}</div></section>`;}).join('')}
+  ${nav()}`;
+}
+function tally(){const t={sim:0,gosto:0,nao:0};VDECK.forEach(c=>{const v=st.cards[c.id];if(t[v]!=null)t[v]++;});return t;}
+function renderLooks(s){
+  const t=tally(), done=t.sim+t.gosto+t.nao;
+  const list=VDECK.filter(c=>st.filter==='todos'||!st.cards[c.id]);
+  return `<div class="eyebrow">Etapa visual 2 de 2 · ${VDECK.length} looks</div><h2>${esc(s.title)}</h2><p class="lead" style="margin-top:8px">${esc(s.lead)}</p>
+  <div class="cardbar"><div class="tally"><span><b>${done}</b>/${VDECK.length} respondidos</span><span>Sou eu <b>${t.sim}</b></span><span>Gosto <b>${t.gosto}</b></span><span>Não sou eu <b>${t.nao}</b></span></div>
+  <div class="filter"><button type="button" class="chip ${st.filter==='todos'?'on':''}" data-filter="todos">Todos</button><button type="button" class="chip ${st.filter==='pend'?'on':''}" data-filter="pend">Sem resposta</button></div></div>
+  <div class="grid">${list.length?list.map(c=>{const v=st.cards[c.id];return `<article class="look ${v==='nao'?'dim':''}">${photo(c.id,'look',PHOTO.has(c.id)?null:c.c,false)}
+   <div class="body"><span class="code">${c.code}</span>
+   <div class="pick" role="group" aria-label="Look ${c.code}">${[['sim','Sou eu'],['gosto','Gosto, mas não sou eu'],['nao','Não sou eu']].map(([k,l])=>`<button type="button" data-card="${c.id}" data-v="${k}" class="${v===k?'on':''}" aria-pressed="${v===k}">${l}</button>`).join('')}</div></div></article>`;}).join(''):'<p class="note">Todos os looks foram respondidos.</p>'}</div>${nav()}`;
+}
+
+/* ---------- cálculo ---------- */
+function zero(){return Object.fromEntries(S.map(k=>[k,0]));}
+function count(ids){const c=zero();ids.forEach(id=>{toArr(st.a[id]).forEach(v=>{const k=String(v).split('|')[0];if(S.includes(k))c[k]++;});});return c;}
+function sum(c){return S.reduce((a,k)=>a+c[k],0);}
+function pct(c){const t=sum(c),o={};S.forEach(k=>o[k]=t?c[k]/t*100:0);return o;}
+function mix(a,b,wa){const o={};const ha=sum(a)>0,hb=sum(b)>0;S.forEach(k=>o[k]=ha&&hb?a[k]*wa+b[k]*(1-wa):ha?a[k]:hb?b[k]:0);return o;}
+function rank(o){return S.slice().sort((x,y)=>o[y]-o[x]);}
+function cardCount(kind,w){const c=zero();VDECK.forEach(x=>{if(st.cards[x.id]===kind)c[x.s]+=w;});return c;}
+/* versões proporcionais: dividem pelo número de looks/peças disponíveis de cada estilo, para que um estilo com menos fotos não perca pontos */
+function perAvail(c,av){const o=zero();S.forEach(k=>o[k]=av[k]?c[k]/av[k]:0);return o;}
+function cardScore(kind,w){return perAvail(cardCount(kind,w),LOOK_AV);}
+function pieceCount(){const c=zero();VCATS.forEach(cat=>toArr(st.pecas[cat.id]).forEach(code=>{const p=PIECE[code];if(p&&PHOTO.has(p.cat+'-'+p.s))c[p.s]++;}));return c;}
+function pieceScore(){return perAvail(pieceCount(),PIECE_AV);}
+const IDS={
+  pos:ALLQ.filter(q=>q.type==='style'||q.type==='adj').map(q=>q.id),
+  contra:ALLQ.filter(q=>q.type==='contra').map(q=>q.id),
+  pers:['P1','P2','P3','P4','V1','V2','V3','V4','C1','C2','C3','C4'],
+  est:['E1','E2','E3','E4','E5','R4'],
+  ident:['I2','I3','I4','I5']
+};
+function compute(){
+  const qRaw=count(IDS.pos);
+  const pRaw=pieceScore();
+  const lRaw=zero();S.forEach(k=>{lRaw[k]=cardScore('sim',2)[k]+cardScore('gosto',1)[k];});
+  const qP=pct(qRaw), pP=pct(pRaw), lP=pct(lRaw);
+  const vis=mix(pP,lP,0.5);
+  const comb=mix(qP,vis,0.5);
+  const order=rank(comb);
+  const triad=order.slice(0,3);
+  const rej=mix(pct(count(IDS.contra)),pct(cardScore('nao',1)),0.5);
+  const contra=S.slice().sort((x,y)=>(rej[y]-rej[x])||(comb[x]-comb[y])).filter(k=>!triad.includes(k))[0];
+  const pers=pct(count(IDS.pers));
+  const est=mix(pct(count(IDS.est)),mix(pP,pct(cardScore('sim',1)),0.5),0.5);
+  const ident=pct(count(IDS.ident));
+  const asp=cardCount('gosto',1), sim=cardCount('sim',1);
+  const objQ=ALLQ.filter(q=>q.type!=='open'&&q.type!=='multi');
+  const answered=objQ.filter(q=>toArr(st.a[q.id]).length>0).length;
+  return {qP,pP,lP,comb,order,triad,rej,contra,pers,est,ident,asp,sim,pRaw,answered,totalQ:objQ.length,hasQ:sum(qRaw)>0,hasV:sum(pRaw)+sum(lRaw)>0};
+}
+const r0=x=>Math.round(x);
+function ans(id){const q=Q[id];if(!q||!q.o)return '';return lista(toArr(st.a[id]).filter(k=>q.o[k]).map(k=>q.o[k]));}
+function words(){return toArr(st.a.I5).map(x=>String(x).split('|')[1]).filter(Boolean).slice(0,3);}
+function lvl(v){return v<=4?'baixa':v<=7?'moderada':'alta';}
+
+function buildReport(R){
+  const [a,b,c]=R.triad, pr=rank(R.pers), er=rank(R.est), ir=rank(R.ident);
+  const w=words().map(x=>x.toLowerCase()), wtxt=w.length?lista(w):P[ir[0]].com;
+  const rep={};
+  rep.signature=`${NOME[a]} com toques de ${NOME[b]} e ${NOME[c]}, para comunicar ${wtxt}.`;
+  rep.triad=`Seu estilo principal é ${NOME[a]} (${r0(R.comb[a])}%), que traz ${P[a].ess}. Ele se combina com ${NOME[b]} (${r0(R.comb[b])}%), que acrescenta ${P[b].ess}, e com ${NOME[c]} (${r0(R.comb[c])}%), que entra como detalhe de ${P[c].ess}.`;
+  rep.contra=`Seu contra-estilo é ${NOME[R.contra]}. Elementos como ${P[R.contra].contra} tendem a gerar desconforto e a sensação de estar fantasiada. Não é uma proibição: se quiser, dá para usá-los em pequenas doses, em um acessório ou detalhe.`;
+  const p1=pr[0],p2=pr[1];
+  rep.pers=[`As características que parecem mais naturais a você vêm do estilo ${NOME[p1]} (${r0(R.pers[p1])}% das respostas de personalidade, valores e comportamento): ${P[p1].tr}. Seus valores centrais giram em torno de ${P[p1].val}.`];
+  if(R.pers[p2]>=20) rep.pers.push(`Há também uma presença forte de ${NOME[p2]} (${r0(R.pers[p2])}%), que acrescenta ${P[p2].tr}.`);
+  if(ans('V1')) rep.pers.push(`Valor que você apontou como inegociável: ${ans('V1').toLowerCase()}.`);
+  if(st.a.V6) rep.persQuote=st.a.V6;
+  const e1=er[0],e2=er[1];
+  rep.roupa=[`Nas preferências estéticas, nas peças e nos looks, sua escolha real se concentra em ${NOME[e1]} (${r0(R.est[e1])}%) e ${NOME[e2]} (${r0(R.est[e2])}%).`];
+  const simTot=sum(R.sim);
+  if(simTot){const ct=rank(R.sim)[0];rep.roupa.push(`Você marcou ${simTot} looks como “sou eu”, sendo ${R.sim[ct]} do estilo ${NOME[ct]}.`);
+    const qt=rank(R.qP)[0]; if(ct!==qt) rep.roupa.push(`Nos looks você se identificou mais com ${NOME[ct]} do que nas respostas escritas (${NOME[qt]}). Vale explorar essa diferença na conversa: muitas vezes a escolha visual revela o que a cliente ainda não sabe nomear.`);}
+  rep.escolhas=VCATS.map(cat=>{const sel=toArr(st.pecas[cat.id]).map(code=>PIECE[code]).filter(p=>p&&PHOTO.has(p.cat+'-'+p.s));return sel.length?[cat.nm,lista(sel.map(p=>p.t.charAt(0).toLowerCase()+p.t.slice(1)))]:null;}).filter(Boolean);
+  rep.pecas=[['Peças que funcionam',`${P[e1].pc}; e, de ${NOME[e2]}, ${P[e2].pc}`],['Tecidos',`${P[e1].tec}; ${P[e2].tec}`],['Cores',`${P[e1].cor}; ${P[e2].cor}`]];
+  rep.ocasioes=R.triad.map(k=>`${NOME[k]}: ${P[k].oc}.`);
+  rep.cuidado=`Cuidado com o excesso de ${NOME[a]}: ${P[a].exc}. Os estilos complementares equilibram esse efeito.`;
+  const des=ir[0], per=toArr(st.a.I1).filter(k=>S.includes(k));
+  rep.ident=[`Você deseja ser percebida a partir do estilo ${NOME[des]}, que comunica ${P[des].com}.`];
+  if(ans('I2')) rep.ident.push(`À primeira vista, quer parecer: ${ans('I2').toLowerCase()}.`);
+  if(per.length){
+    const pn=lista(per.map(k=>NOME[k]));
+    rep.ident.push(`Hoje, sente que é percebida como ${lista(per.map(k=>Q.I1.o[k].toLowerCase()))} (leitura ${pn}).`);
+    rep.ident.push(per.includes(des)?'A imagem percebida e a desejada estão alinhadas. O trabalho aqui é refinar e dar mais intenção ao que já funciona.':`Há uma distância entre a imagem percebida (${pn}) e a desejada (${NOME[des]}). A estratégia de vestuário deve incorporar, de forma gradual, elementos de ${NOME[des]}: ${P[des].pc}.`);
+  }
+  if(w.length){const ws=toArr(st.a.I5).map(x=>String(x).split('|'));rep.ident.push(`As 3 palavras que você escolheu: ${lista(ws.map(([k,x])=>`${x.toLowerCase()} (${NOME[k]})`))}.`);}
+  const aspTot=sum(R.asp);
+  if(aspTot){const ak=rank(R.asp)[0];rep.ident.push(`Os looks marcados como “gosto, mas não sou eu” apontam para ${NOME[ak]} (${R.asp[ak]} de ${aspTot}). Isso pode indicar um desejo de expressão que você ainda não se permite.`);}
+  const sc=['R1','R2','R3'].map(id=>st.a[id]).filter(v=>typeof v==='number');
+  rep.emo=[];
+  if(typeof st.a.R1==='number') rep.emo.push(['Satisfação com a imagem',`${st.a.R1}/10 · ${lvl(st.a.R1)}`]);
+  if(typeof st.a.R2==='number') rep.emo.push(['Segurança ao se vestir',`${st.a.R2}/10 · ${lvl(st.a.R2)}`]);
+  if(typeof st.a.R3==='number') rep.emo.push(['Imagem representa quem é',`${st.a.R3}/10 · ${lvl(st.a.R3)}`]);
+  const media=sc.length?sc.reduce((x,y)=>x+y,0)/sc.length:null;
+  if(media!=null) rep.emo.push(['Média emocional',`${media.toFixed(1).replace('.',',')}/10`]);
+  if(toArr(st.a.R5).length) rep.emo.push(['Sentimento diante do espelho',lista(toArr(st.a.R5))]);
+  if(toArr(st.a.R6).length) rep.emo.push(['Barreiras',lista(toArr(st.a.R6).map(x=>x.toLowerCase()))]);
+  rep.emoTxt = media==null?'':media<=4?'A relação emocional com a própria imagem está fragilizada. Vale começar a consultoria pelo que já funciona e celebrar pequenas vitórias, antes de propor mudanças grandes.':media<=7?'A relação com a própria imagem é ambivalente: há base de confiança, mas também dúvida. Ganhos rápidos, como cores e modelagens certeiras, tendem a elevar essas notas.':'A relação com a própria imagem é positiva. O foco pode ser refinamento, coerência e expansão de repertório.';
+  rep.quotes=[['Diferença entre a imagem atual e a desejada',st.a.I6],['O que deseja usar, mas não se permite',st.a.R7]].filter(x=>x[1]);
+  return rep;
+}
+
+function renderResult(){
+  const R=compute();
+  if(!R.hasQ&&!R.hasV) return `<div class="eyebrow">Resultado</div><h2>Ainda não há respostas suficientes</h2><p class="lead" style="margin-top:8px">Responda os blocos de perguntas, as peças e os looks para gerar a tríade de estilo e a devolutiva.</p><div class="nav"><button class="btn primary" type="button" data-go="1">Ir para as perguntas</button></div>`;
+  const rep=buildReport(R);
+  const nome=st.info.nome?esc(st.info.nome):'Cliente';
+  const dt=st.info.data?new Date(st.info.data+'T12:00:00').toLocaleDateString('pt-BR'):'';
+  const bars=R.order.map((k,i)=>{const isT=i<3,isC=k===R.contra;return `<div class="bar ${isC?'contra':''}"><div class="nm"><span>${NOME[k]}</span>${isT?`<span class="tag tri">${i+1}º</span>`:''}${isC?'<span class="tag">contra</span>':''}</div><div class="track"><div class="fill" style="width:${R.comb[k].toFixed(1)}%;background:var(--st-${k});opacity:${isC?.45:1}"></div></div><div class="pc">${r0(R.comb[k])}%</div></div>`;}).join('');
+  const rows=S.map(k=>`<tr><td>${NOME[k]}</td><td class="n">${r0(R.qP[k])}%</td><td class="n">${r0(R.pP[k])}%</td><td class="n">${r0(R.lP[k])}%</td><td class="n">${r0(R.comb[k])}%</td><td class="n">${r0(R.rej[k])}%</td></tr>`).join('');
+  const missing=R.totalQ-R.answered, looksLeft=VDECK.filter(c=>!st.cards[c.id]).length, catsLeft=VCATS.filter(c=>!toArr(st.pecas[c.id]).length).length;
+  const gaps=[missing>0?`${missing} pergunta(s) objetiva(s)`:'',catsLeft>0?`${catsLeft} categoria(s) de peças`:'',looksLeft>0?`${looksLeft} look(s)`:''].filter(Boolean);
+  return `<div class="res-head"><div class="eyebrow">Resultado · ${nome}${dt?' · '+dt:''}</div><h1>Tríade: <em>${NOME[R.triad[0]]}</em>, ${NOME[R.triad[1]]} e ${NOME[R.triad[2]]}</h1></div>
+  ${gaps.length?`<p class="note">Sem resposta: ${lista(gaps)}. O resultado considera apenas o que foi respondido.</p>`:''}
+  <div class="signature">${esc(rep.signature)}</div>
+  <div class="bars" role="list" aria-label="Distribuição dos estilos">${bars}</div>
+  <p class="note" style="margin-top:10px">Peso: 50% questionário e 50% etapa visual (metade peças, metade looks). Contra-estilo: maior rejeição fora da tríade.</p>
+
+  <div class="section"><h3>Tríade e contra-estilo</h3><p>${esc(rep.triad)}</p><p>${esc(rep.contra)}</p></div>
+
+  <div class="section"><div class="eyebrow">Devolutiva 1</div><h3>Personalidade</h3>${rep.pers.map(x=>`<p>${esc(x)}</p>`).join('')}${rep.persQuote?`<p class="quote">O que é mais importante na sua vida hoje: ${esc(rep.persQuote)}</p>`:''}</div>
+
+  <div class="section"><div class="eyebrow">Devolutiva 2</div><h3>Roupas e ocasiões</h3>${rep.roupa.map(x=>`<p>${esc(x)}</p>`).join('')}
+  ${rep.escolhas.length?`<p><strong>Peças escolhidas</strong></p><dl class="kv">${rep.escolhas.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`:''}
+  <p><strong>Direção para o guarda-roupa</strong></p><dl class="kv">${rep.pecas.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+  <p><strong>Ocasiões para cada estilo da tríade</strong></p><ul>${rep.ocasioes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="note">${esc(rep.cuidado)}</p></div>
+
+  <div class="section"><div class="eyebrow">Devolutiva 3</div><h3>Identidade e percepção</h3>${rep.ident.map(x=>`<p>${esc(x)}</p>`).join('')}
+  ${rep.emo.length?`<p><strong>Relação emocional com a própria imagem</strong></p><dl class="kv">${rep.emo.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl><p>${esc(rep.emoTxt)}</p>`:''}
+  ${rep.quotes.map(([k,v])=>`<p class="quote">${esc(k)}: ${esc(v)}</p>`).join('')}</div>
+
+  <div class="section"><div class="eyebrow">Visão da consultora</div><h3>Pontuação por fonte</h3>
+  <div class="tablewrap"><table><thead><tr><th>Estilo</th><th class="n">Questionário</th><th class="n">Peças</th><th class="n">Looks</th><th class="n">Final</th><th class="n">Rejeição</th></tr></thead><tbody>${rows}</tbody></table></div></div>
+
+  <div class="actions"><button class="btn primary" type="button" data-act="copy">Copiar resultado</button><button class="btn" type="button" data-go="1">Revisar respostas</button><button class="btn ghost" type="button" data-act="reset">Novo teste</button></div>
+  <div id="confirmbox"></div>`;
+}
+function reportText(){
+  const R=compute(), rep=buildReport(R);
+  const L=[];
+  L.push(`ASSINATURA DE ESTILO · ${st.info.nome||'Cliente'}${st.info.data?' · '+new Date(st.info.data+'T12:00:00').toLocaleDateString('pt-BR'):''}`,'');
+  L.push(`Tríade: ${R.triad.map(k=>`${NOME[k]} ${r0(R.comb[k])}%`).join(' · ')}`);
+  L.push(`Contra-estilo: ${NOME[R.contra]}`,'');
+  L.push(`Assinatura: ${rep.signature}`,'');
+  L.push('Distribuição: '+R.order.map(k=>`${NOME[k]} ${r0(R.comb[k])}%`).join(' | '),'');
+  L.push(rep.triad,rep.contra,'');
+  L.push('1. PERSONALIDADE',...rep.pers);if(rep.persQuote)L.push(`Mais importante hoje: ${rep.persQuote}`);L.push('');
+  L.push('2. ROUPAS E OCASIÕES',...rep.roupa);
+  if(rep.escolhas.length)L.push('Peças escolhidas:',...rep.escolhas.map(([k,v])=>`- ${k}: ${v}`));
+  L.push(...rep.pecas.map(([k,v])=>`${k}: ${v}`),'Ocasiões:',...rep.ocasioes.map(x=>'- '+x),rep.cuidado,'');
+  L.push('3. IDENTIDADE E PERCEPÇÃO',...rep.ident,...rep.emo.map(([k,v])=>`${k}: ${v}`));if(rep.emoTxt)L.push(rep.emoTxt);rep.quotes.forEach(([k,v])=>L.push(`${k}: ${v}`));
+  return L.join('\n');
+}
+
+/* ---------- eventos ---------- */
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,2200);}
+function go(i){UNLOCK=false;st.step=Math.max(0,Math.min(STEPS.length-1,i));save();render();window.scrollTo({top:0,behavior:'instant'});}
+function keepScroll(fn){const y=window.scrollY;fn();render();window.scrollTo(0,y);}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(g){go(+g.dataset.go);return;}
+  const a=e.target.closest('[data-act]');
+  if(a){const act=a.dataset.act;
+    if(act==='next')go(st.step+1);
+    if(act==='prev')go(st.step-1);
+    if(act==='copy'){const txt=reportText();
+      const fallback=()=>{const box=document.getElementById('confirmbox');box.innerHTML=`<div class="confirm" style="display:block"><p class="note" style="margin:0 0 8px">Selecione e copie o texto abaixo.</p><textarea id="copytxt" style="min-height:240px">${esc(txt)}</textarea></div>`;const ta=document.getElementById('copytxt');ta.focus();ta.select();};
+      try{navigator.clipboard.writeText(txt).then(()=>toast('Resultado copiado'),fallback);}catch(err){fallback();}}
+    if(act==='reset'){document.getElementById('confirmbox').innerHTML=`<div class="confirm"><span>Apagar todas as respostas deste navegador e começar um novo teste?</span><button class="btn primary" type="button" data-act="reset-yes">Apagar e recomeçar</button><button class="btn ghost" type="button" data-act="reset-no">Cancelar</button></div>`;}
+    if(act==='reset-no')document.getElementById('confirmbox').innerHTML='';
+    if(act==='reset-yes'){UNLOCK=false;st={step:0,info:{nome:'',data:''},a:{},cards:{},pecas:{},filter:'todos'};save();render();toast('Novo teste iniciado');}
+    return;}
+  const f=e.target.closest('[data-filter]'); if(f){st.filter=f.dataset.filter;save();render();return;}
+  const p=e.target.closest('[data-piece]');
+  if(p){const code=p.dataset.piece,cat=PIECE[code].cat,sel=toArr(st.pecas[cat]);
+    if(sel.includes(code)) st.pecas[cat]=sel.filter(x=>x!==code);
+    else if(sel.length>=2){toast('Escolha no máximo 2 peças por categoria');return;}
+    else st.pecas[cat]=[...sel,code];
+    save();keepScroll(()=>{});return;}
+  const c=e.target.closest('[data-card]');
+  if(c){const id=c.dataset.card,v=c.dataset.v;if(st.cards[id]===v)delete st.cards[id];else st.cards[id]=v;save();keepScroll(()=>{});}
+});
+document.addEventListener('change',e=>{
+  const el=e.target; const q=Q[el.name]; if(!q)return;
+  if(q.type==='scale')st.a[q.id]=+el.value;
+  else{
+    const arr=toArr(st.a[q.id]);
+    const max=q.type==='adj'?3:LIM.includes(q.type)?2:Infinity;
+    if(el.checked&&arr.length>=max){el.checked=false;toast(q.type==='adj'?'Escolha exatamente 3 palavras':'Escolha no máximo 2 alternativas');return;}
+    st.a[q.id]=el.checked?[...arr,el.value]:arr.filter(x=>x!==el.value);
+  }
+  save();
+  el.closest('fieldset').querySelectorAll('label').forEach(l=>{const i=l.querySelector('input');l.classList.toggle('on',i.checked);});
+});
+document.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.dataset.info){st.info[el.dataset.info]=el.value;save();}
+  if(el.dataset.open){st.a[el.dataset.open]=el.value;save();}
+});
+render();
+</script>
+
+</body>
+</html>
