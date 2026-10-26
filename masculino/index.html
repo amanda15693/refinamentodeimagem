@@ -230,7 +230,7 @@ const S = ['n','t','e','r','s','c','d'];
 const NOME = {n:'Esportivo',t:'Tradicional',e:'Refinado',r:'Romântico',s:'Sexy',c:'Criativo',d:'Dramático'};
 
 /* Fotos publicadas em img/<chave>.webp. Peças: "<categoria>-<estilo>"; looks: id do look. Sem foto, o cartão mostra um espaço reservado. */
-const PHOTO = new Set(['E2-n','E2-t','E2-e','E2-r','E2-s','E2-c','E2-d']);
+const PHOTO = new Set(['PC-n','PC-t','PC-e','PC-r','PC-s','PC-c','PC-d','E2-n','E2-t','E2-e','E2-r','E2-s','E2-c','E2-d']);
 
 /* Paletas da pergunta E1 */
 const PAL = {n:['#b08a5e','#6f7650','#d8c6a5','#2f3a4a'],t:['#1f2f4d','#8d9097','#d9c9ab','#f3f1ec'],e:['#efe9df','#c9b49a','#1b1a1d','#8a6a4a'],r:['#bcd3ea','#d9cfe3','#e8cfd3','#f4efe8'],s:['#111014','#5e1424','#3a3d44','#c49a6c'],c:['#e0662f','#2f8c84','#f1c84b','#3d6db5'],d:['#0f0f10','#f6f5f2','#b3122b','#5a5a60']};
@@ -296,7 +296,7 @@ const STEPS = [
 
 /* ---------- PEÇAS (1 por estilo em cada categoria) ---------- */
 const CATS = [
- {id:'PC',nm:'Parte de cima',ic:'blusa',o:{n:'Camiseta de algodão lisa',t:'Camisa social branca',e:'Camisa de linho nobre off-white',r:'Suéter de tricô fino em tom claro',s:'Camiseta ajustada preta',c:'Camisa estampada de manga curta',d:'Camiseta oversized com recortes'}},
+ {id:'PC',nm:'Parte de cima',ic:'blusa',o:{n:'Camiseta branca básica',t:'Camisa social branca',e:'Suéter de tricô trançado off-white',r:'Camiseta de tricô canelado azul-claro',s:'Camisa vinho acetinada com listras',c:'Camisa de veludo cotelê em blocos de cor',d:'Regata ampla preta'}},
  {id:'PB',nm:'Parte de baixo',ic:'calca',o:{n:'Jeans reto ou bermuda de sarja',t:'Calça chino cáqui',e:'Calça de alfaiataria com vinco',r:'Calça de linho clara',s:'Jeans skinny escuro',c:'Calça estampada ou colorida',d:'Calça cargo ou de couro preta'}},
  {id:'TP',nm:'Terceira peça',ic:'casaco',o:{n:'Jaqueta jeans ou corta-vento',t:'Blazer azul-marinho clássico',e:'Casaco de lã camelo',r:'Cardigã de tricô macio',s:'Jaqueta de couro preta ajustada',c:'Jaqueta estampada ou bomber colorida',d:'Sobretudo longo estruturado'}},
  {id:'SP',nm:'Sapatos',ic:'sapato',o:{n:'Tênis casual',t:'Sapato derby ou oxford',e:'Mocassim de couro',r:'Mocassim de camurça claro',s:'Bota chelsea preta',c:'Slip-on estampado',d:'Coturno robusto'}},
