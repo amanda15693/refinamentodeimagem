@@ -287,7 +287,7 @@ const STEPS = [
   {id:'R6',type:'multi',text:'O que mais impede você de se vestir como gostaria?',hint:'Marque quantas quiser.',opts:['Falta de tempo','Insegurança com o corpo','Medo do julgamento','Não saber combinar as peças','Orçamento','Ambiente de trabalho restritivo','Não saber qual é o meu estilo']},
   {id:'R7',type:'open',text:'Existe alguma peça ou estilo que você deseja usar, mas não se permite? Por quê?'}
  ]},
- {key:'pecas', label:'Peças', title:'Peças que você mais gosta', lead:'Em cada categoria, toque nas 2 peças que você mais gostaria de usar. Se só uma agradar, escolha só uma.'},
+ {key:'pecas', label:'Peças', title:'Peças', lead:'Para cada peça, responda pela primeira impressão: “Uso”, “Usaria” ou “Não usaria”.'},
  {key:'looks', label:'Looks', title:'Looks completos', lead:'Para cada look, decida rápido, pela primeira impressão: “Sou eu”, “Gosto, mas não sou eu” ou “Não sou eu”.'},
  {key:'res', label:'Resultado'}
 ];
@@ -412,10 +412,10 @@ function lista(arr){return arr.length<=1?arr.join(''):arr.slice(0,-1).join(', ')
 const LET='ABCDEFG';
 const LIM=['style','contra','perc','choice'];
 const DECK = shuffled(CARDS,'cartoes-v1').map((c,i)=>Object.assign({code:'LK'+String(i+1).padStart(2,'0')},c));
-const PIECES = CATS.flatMap(cat=>shuffled(S,'cat-'+cat.id).map((k,i)=>({code:cat.id+(i+1),cat:cat.id,s:k,t:cat.o[k],ic:cat.ic})));
+const PIECES = CATS.flatMap(cat=>shuffled(Object.keys(cat.o),'cat-'+cat.id).map((k,i)=>({code:cat.id+(i+1),cat:cat.id,s:k[0],key:cat.id+'-'+k,t:cat.o[k],ic:cat.ic})));
 const PIECE = Object.fromEntries(PIECES.map(p=>[p.code,p]));
 /* Só entram no teste as peças e looks que já têm foto */
-const VPIECES = PIECES.filter(p=>PHOTO.has(p.cat+'-'+p.s));
+const VPIECES = PIECES.filter(p=>PHOTO.has(p.key));
 const VCATS = CATS.filter(cat=>VPIECES.some(p=>p.cat===cat.id));
 const VDECK = DECK.filter(c=>PHOTO.has(c.id));
 const PIECE_AV = Object.fromEntries(S.map(k=>[k,VPIECES.filter(p=>p.s===k).length]));
@@ -456,6 +456,7 @@ document.addEventListener('submit',async e=>{
 });
 let st = {step:0, info:{nome:'',data:''}, a:{}, cards:{}, pecas:{}, filter:'todos'};
 try{const raw=localStorage.getItem(KEY); if(raw) st=Object.assign(st,JSON.parse(raw));}catch(e){}
+if(Object.values(st.pecas||{}).some(v=>Array.isArray(v)))st.pecas={};
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
 
 /* ---------- render ---------- */
@@ -532,13 +533,14 @@ function renderQ(q){
   return '';
 }
 function renderPecas(s){
-  const done=VCATS.filter(c=>toArr(st.pecas[c.id]).length).length;
-  return `<div class="eyebrow">Etapa visual 1 de 2 · ${VCATS.length} categorias</div><h2>${esc(s.title)}</h2><p class="lead" style="margin-top:8px">${esc(s.lead)}</p>
-  <p class="note">${done} de ${VCATS.length} categorias respondidas.</p>
-  ${VCATS.map(cat=>{const sel=toArr(st.pecas[cat.id]);return `<section class="cat"><div class="cat-head"><h3>${esc(cat.nm)}</h3><span class="count">${sel.length}/2 escolhidas</span></div>
-   <div class="pieces${cat.id==='AC'?' wide':''}">${VPIECES.filter(p=>p.cat===cat.id).map(p=>{const on=sel.includes(p.code);return `<button type="button" class="piece ${on?'on':''}" data-piece="${p.code}" aria-pressed="${on}">${photo(p.cat+'-'+p.s,p.ic,null,on)}<span class="cap"><span class="code">${p.code}</span></span></button>`;}).join('')}</div></section>`;}).join('')}
+  const done=VPIECES.filter(p=>st.pecas[p.code]).length;
+  return `<div class="eyebrow">Etapa visual 1 de 2 · ${VPIECES.length} peças</div><h2>${esc(s.title)}</h2><p class="lead" style="margin-top:8px">${esc(s.lead)}</p>
+  <p class="note">${done} de ${VPIECES.length} peças respondidas.</p>
+  ${VCATS.map(cat=>{const ps=VPIECES.filter(p=>p.cat===cat.id);const n=ps.filter(p=>st.pecas[p.code]).length;return `<section class="cat"><div class="cat-head"><h3>${esc(cat.nm)}</h3><span class="count">${n}/${ps.length} respondidas</span></div>
+   <div class="pieces${cat.id==='AC'?' wide':''}">${ps.map(p=>{const v=st.pecas[p.code];return `<article class="look ${v==='nao'?'dim':''}">${photo(p.key,p.ic,null,false)}<div class="body"><span class="code">${p.code}</span><div class="pick" role="group" aria-label="Peça ${p.code}">${[['sim','Uso'],['gosto','Usaria'],['nao','Não usaria']].map(([k,l])=>`<button type="button" data-pc="${p.code}" data-v="${k}" class="${v===k?'on':''}" aria-pressed="${v===k}">${l}</button>`).join('')}</div></div></article>`;}).join('')}</div></section>`;}).join('')}
   ${nav()}`;
 }
+
 function tally(){const t={sim:0,gosto:0,nao:0};VDECK.forEach(c=>{const v=st.cards[c.id];if(t[v]!=null)t[v]++;});return t;}
 function renderLooks(s){
   const t=tally(), done=t.sim+t.gosto+t.nao;
@@ -562,8 +564,9 @@ function cardCount(kind,w){const c=zero();VDECK.forEach(x=>{if(st.cards[x.id]===
 /* versões proporcionais: dividem pelo número de looks/peças disponíveis de cada estilo, para que um estilo com menos fotos não perca pontos */
 function perAvail(c,av){const o=zero();S.forEach(k=>o[k]=av[k]?c[k]/av[k]:0);return o;}
 function cardScore(kind,w){return perAvail(cardCount(kind,w),LOOK_AV);}
-function pieceCount(){const c=zero();VCATS.forEach(cat=>toArr(st.pecas[cat.id]).forEach(code=>{const p=PIECE[code];if(p&&PHOTO.has(p.cat+'-'+p.s))c[p.s]++;}));return c;}
-function pieceScore(){return perAvail(pieceCount(),PIECE_AV);}
+function pieceCount(kind,w){const c=zero();VPIECES.forEach(p=>{if(st.pecas[p.code]===kind)c[p.s]+=w;});return c;}
+function pieceScore(){const a=pieceCount('sim',2),b=pieceCount('gosto',1),c=zero();S.forEach(k=>c[k]=a[k]+b[k]);return perAvail(c,PIECE_AV);}
+function pieceRej(){return perAvail(pieceCount('nao',1),PIECE_AV);}
 const IDS={
   pos:ALLQ.filter(q=>q.type==='style'||q.type==='adj').map(q=>q.id),
   contra:ALLQ.filter(q=>q.type==='contra').map(q=>q.id),
@@ -580,7 +583,7 @@ function compute(){
   const comb=mix(qP,vis,0.5);
   const order=rank(comb);
   const triad=order.slice(0,3);
-  const rej=mix(pct(count(IDS.contra)),pct(cardScore('nao',1)),0.5);
+  const rej=mix(pct(count(IDS.contra)),mix(pct(cardScore('nao',1)),pct(pieceRej()),0.5),0.5);
   const contra=S.slice().sort((x,y)=>(rej[y]-rej[x])||(comb[x]-comb[y])).filter(k=>!triad.includes(k))[0];
   const pers=pct(count(IDS.pers));
   const est=mix(pct(count(IDS.est)),mix(pP,pct(cardScore('sim',1)),0.5),0.5);
@@ -612,7 +615,8 @@ function buildReport(R){
   const simTot=sum(R.sim);
   if(simTot){const ct=rank(R.sim)[0];rep.roupa.push(`Você marcou ${simTot} looks como “sou eu”, sendo ${R.sim[ct]} do estilo ${NOME[ct]}.`);
     const qt=rank(R.qP)[0]; if(ct!==qt) rep.roupa.push(`Nos looks você se identificou mais com ${NOME[ct]} do que nas respostas escritas (${NOME[qt]}). Vale explorar essa diferença na conversa: muitas vezes a escolha visual revela o que a cliente ainda não sabe nomear.`);}
-  rep.escolhas=VCATS.map(cat=>{const sel=toArr(st.pecas[cat.id]).map(code=>PIECE[code]).filter(p=>p&&PHOTO.has(p.cat+'-'+p.s));return sel.length?[cat.nm,lista(sel.map(p=>p.t.charAt(0).toLowerCase()+p.t.slice(1)))]:null;}).filter(Boolean);
+  const low=t=>t.charAt(0).toLowerCase()+t.slice(1);
+  rep.escolhas=VCATS.map(cat=>{const ps=VPIECES.filter(p=>p.cat===cat.id);const u=ps.filter(p=>st.pecas[p.code]==='sim'),w=ps.filter(p=>st.pecas[p.code]==='gosto');const parts=[u.length?'usa: '+lista(u.map(p=>low(p.t))):'',w.length?'usaria: '+lista(w.map(p=>low(p.t))):''].filter(Boolean);return parts.length?[cat.nm,parts.join('; ')]:null;}).filter(Boolean);
   rep.pecas=[['Peças que funcionam',`${P[e1].pc}; e, de ${NOME[e2]}, ${P[e2].pc}`],['Tecidos',`${P[e1].tec}; ${P[e2].tec}`],['Cores',`${P[e1].cor}; ${P[e2].cor}`]];
   rep.ocasioes=R.triad.map(k=>`${NOME[k]}: ${P[k].oc}.`);
   rep.cuidado=`Cuidado com o excesso de ${NOME[a]}: ${P[a].exc}. Os estilos complementares equilibram esse efeito.`;
@@ -649,8 +653,8 @@ function renderResult(){
   const dt=st.info.data?new Date(st.info.data+'T12:00:00').toLocaleDateString('pt-BR'):'';
   const bars=R.order.map((k,i)=>{const isT=i<3,isC=k===R.contra;return `<div class="bar ${isC?'contra':''}"><div class="nm"><span>${NOME[k]}</span>${isT?`<span class="tag tri">${i+1}º</span>`:''}${isC?'<span class="tag">contra</span>':''}</div><div class="track"><div class="fill" style="width:${R.comb[k].toFixed(1)}%;background:var(--st-${k});opacity:${isC?.45:1}"></div></div><div class="pc">${r0(R.comb[k])}%</div></div>`;}).join('');
   const rows=S.map(k=>`<tr><td>${NOME[k]}</td><td class="n">${r0(R.qP[k])}%</td><td class="n">${r0(R.pP[k])}%</td><td class="n">${r0(R.lP[k])}%</td><td class="n">${r0(R.comb[k])}%</td><td class="n">${r0(R.rej[k])}%</td></tr>`).join('');
-  const missing=R.totalQ-R.answered, looksLeft=VDECK.filter(c=>!st.cards[c.id]).length, catsLeft=VCATS.filter(c=>!toArr(st.pecas[c.id]).length).length;
-  const gaps=[missing>0?`${missing} pergunta(s) objetiva(s)`:'',catsLeft>0?`${catsLeft} categoria(s) de peças`:'',looksLeft>0?`${looksLeft} look(s)`:''].filter(Boolean);
+  const missing=R.totalQ-R.answered, looksLeft=VDECK.filter(c=>!st.cards[c.id]).length, catsLeft=VPIECES.filter(p=>!st.pecas[p.code]).length;
+  const gaps=[missing>0?`${missing} pergunta(s) objetiva(s)`:'',catsLeft>0?`${catsLeft} peça(s)`:'',looksLeft>0?`${looksLeft} look(s)`:''].filter(Boolean);
   return `<div class="res-head"><div class="eyebrow">Resultado · ${nome}${dt?' · '+dt:''}</div><h1>Tríade: <em>${NOME[R.triad[0]]}</em>, ${NOME[R.triad[1]]} e ${NOME[R.triad[2]]}</h1></div>
   ${gaps.length?`<p class="note">Sem resposta: ${lista(gaps)}. O resultado considera apenas o que foi respondido.</p>`:''}
   <div class="signature">${esc(rep.signature)}</div>
@@ -662,7 +666,7 @@ function renderResult(){
   <div class="section"><div class="eyebrow">Devolutiva 1</div><h3>Personalidade</h3>${rep.pers.map(x=>`<p>${esc(x)}</p>`).join('')}${rep.persQuote?`<p class="quote">O que é mais importante na sua vida hoje: ${esc(rep.persQuote)}</p>`:''}</div>
 
   <div class="section"><div class="eyebrow">Devolutiva 2</div><h3>Roupas e ocasiões</h3>${rep.roupa.map(x=>`<p>${esc(x)}</p>`).join('')}
-  ${rep.escolhas.length?`<p><strong>Peças escolhidas</strong></p><dl class="kv">${rep.escolhas.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`:''}
+  ${rep.escolhas.length?`<p><strong>Peças que usa ou usaria</strong></p><dl class="kv">${rep.escolhas.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`:''}
   <p><strong>Direção para o guarda-roupa</strong></p><dl class="kv">${rep.pecas.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
   <p><strong>Ocasiões para cada estilo da tríade</strong></p><ul>${rep.ocasioes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="note">${esc(rep.cuidado)}</p></div>
 
@@ -687,7 +691,7 @@ function reportText(){
   L.push(rep.triad,rep.contra,'');
   L.push('1. PERSONALIDADE',...rep.pers);if(rep.persQuote)L.push(`Mais importante hoje: ${rep.persQuote}`);L.push('');
   L.push('2. ROUPAS E OCASIÕES',...rep.roupa);
-  if(rep.escolhas.length)L.push('Peças escolhidas:',...rep.escolhas.map(([k,v])=>`- ${k}: ${v}`));
+  if(rep.escolhas.length)L.push('Peças que usa ou usaria:',...rep.escolhas.map(([k,v])=>`- ${k}: ${v}`));
   L.push(...rep.pecas.map(([k,v])=>`${k}: ${v}`),'Ocasiões:',...rep.ocasioes.map(x=>'- '+x),rep.cuidado,'');
   L.push('3. IDENTIDADE E PERCEPÇÃO',...rep.ident,...rep.emo.map(([k,v])=>`${k}: ${v}`));if(rep.emoTxt)L.push(rep.emoTxt);rep.quotes.forEach(([k,v])=>L.push(`${k}: ${v}`));
   return L.join('\n');
@@ -711,12 +715,8 @@ document.addEventListener('click',e=>{
     if(act==='reset-yes'){UNLOCK=false;st={step:0,info:{nome:'',data:''},a:{},cards:{},pecas:{},filter:'todos'};save();render();toast('Novo teste iniciado');}
     return;}
   const f=e.target.closest('[data-filter]'); if(f){st.filter=f.dataset.filter;save();render();return;}
-  const p=e.target.closest('[data-piece]');
-  if(p){const code=p.dataset.piece,cat=PIECE[code].cat,sel=toArr(st.pecas[cat]);
-    if(sel.includes(code)) st.pecas[cat]=sel.filter(x=>x!==code);
-    else if(sel.length>=2){toast('Escolha no máximo 2 peças por categoria');return;}
-    else st.pecas[cat]=[...sel,code];
-    save();keepScroll(()=>{});return;}
+  const pc=e.target.closest('[data-pc]');
+  if(pc){const id=pc.dataset.pc,v=pc.dataset.v;if(st.pecas[id]===v)delete st.pecas[id];else st.pecas[id]=v;save();keepScroll(()=>{});return;}
   const c=e.target.closest('[data-card]');
   if(c){const id=c.dataset.card,v=c.dataset.v;if(st.cards[id]===v)delete st.cards[id];else st.cards[id]=v;save();keepScroll(()=>{});}
 });
