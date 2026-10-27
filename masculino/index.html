@@ -412,9 +412,10 @@ document.addEventListener('submit',async e=>{
   else{document.getElementById('lockmsg').hidden=false;}
 });
 let st = {step:0, info:{nome:'',data:''}, a:{}, cards:{}, pecas:{}, filter:'todos'};
-try{const raw=localStorage.getItem(KEY); if(raw) st=Object.assign(st,JSON.parse(raw));}catch(e){}
+try{localStorage.removeItem(KEY);}catch(e){}
+try{const raw=sessionStorage.getItem(KEY); if(raw) st=Object.assign(st,JSON.parse(raw));}catch(e){}
 if(Object.values(st.pecas||{}).some(v=>Array.isArray(v)))st.pecas={};
-function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+function save(){try{sessionStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
 
 /* ---------- render ---------- */
 const main=document.getElementById('main');
